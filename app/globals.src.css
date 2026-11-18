@@ -1,13 +1,38 @@
 @import "tailwindcss";
 
+@theme {
+  --color-sky-50: #faf5ff;
+  --color-sky-100: #f3e8ff;
+  --color-sky-200: #e9d5ff;
+  --color-sky-300: #d8b4fe;
+  --color-sky-400: #c084fc;
+  --color-sky-500: #a855f7;
+  --color-sky-600: #9333ea;
+  --color-sky-700: #7e22ce;
+  --color-sky-800: #6b21a8;
+  --color-sky-900: #581c87;
+  --color-sky-950: #3b0764;
+  --color-cyan-50: #fdf2f8;
+  --color-cyan-100: #fce7f3;
+  --color-cyan-200: #fbcfe8;
+  --color-cyan-300: #f9a8d4;
+  --color-cyan-400: #f472b6;
+  --color-cyan-500: #ec4899;
+  --color-cyan-600: #db2777;
+  --color-cyan-700: #be185d;
+  --color-cyan-800: #9d174d;
+  --color-cyan-900: #831843;
+  --color-cyan-950: #500724;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: #030712;
-    color: #F8FAFC;
+    background-color: #0d071a;
+    color: #fdf2f8;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     overflow-x: hidden;
   }
@@ -15,7 +40,7 @@
 
 @layer base {
   :focus-visible {
-    outline: 2px solid rgba(139, 92, 246, 0.8);
+    outline: 2px solid rgba(244, 114, 182, 0.85);
     outline-offset: 3px;
   }
 
@@ -37,57 +62,41 @@
 /* Character Up-and-Down Gentle Walk Animation */
 @keyframes walkUpDown {
   0% {
-    transform: translateY(-22px) rotate(-1deg);
+    transform: translateY(-18px) rotate(-1.5deg);
   }
   25% {
-    transform: translateY(-3px) rotate(1deg);
+    transform: translateY(-2px) rotate(1.2deg);
   }
   50% {
-    transform: translateY(22px) rotate(-1deg);
+    transform: translateY(18px) rotate(-1.5deg);
   }
   75% {
-    transform: translateY(-3px) rotate(1deg);
+    transform: translateY(-2px) rotate(1.2deg);
   }
   100% {
-    transform: translateY(-22px) rotate(-1deg);
+    transform: translateY(-18px) rotate(-1.5deg);
   }
 }
 
 .animate-walk-up-down {
-  animation: walkUpDown 5s ease-in-out infinite;
+  animation: walkUpDown 4.2s ease-in-out infinite;
 }
 
-/* Realistic Robot Subtle Breathing & Violet/Blue Aura */
-@keyframes robotBreathe {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 15px 35px rgba(139, 92, 246, 0.45)) drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
-  }
-  50% {
-    transform: scale(1.02);
-    filter: drop-shadow(0 20px 45px rgba(139, 92, 246, 0.65)) drop-shadow(0 0 30px rgba(56, 189, 248, 0.5));
-  }
-}
-
-.animate-robot-breathe {
-  animation: robotBreathe 4s ease-in-out infinite;
-}
-
-/* Floating animation */
+/* Floating gentle bobble animation */
 @keyframes floatGentle {
   0%, 100% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 }
 
 .animate-float-gentle {
-  animation: floatGentle 4.5s ease-in-out infinite;
+  animation: floatGentle 4s ease-in-out infinite;
 }
 
-/* Marquee infinite scroll keyframes */
+/* Marquee infinite scroll */
 @keyframes marquee {
   0% {
     transform: translateX(0%);
@@ -100,60 +109,60 @@
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 30s linear infinite;
+  animation: marquee 32s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* Violet & Blue Cinematic Glow Pulses */
-@keyframes violetGlow {
+/* Dreamy Pastel Rose & Violet Glow Pulses */
+@keyframes dreamyRoseGlow {
   0%, 100% {
     transform: scale(1) translateY(0px);
-    opacity: 0.5;
+    opacity: 0.45;
   }
   50% {
-    transform: scale(1.15) translateY(-12px);
-    opacity: 0.8;
+    transform: scale(1.12) translateY(-10px);
+    opacity: 0.75;
   }
 }
 
-.animate-violet-glow {
-  animation: violetGlow 7s ease-in-out infinite;
+.animate-rose-glow {
+  animation: dreamyRoseGlow 7.5s ease-in-out infinite;
 }
 
-@keyframes blueGlow {
+@keyframes dreamyLilacGlow {
   0%, 100% {
     transform: scale(1.1) translateY(0px);
     opacity: 0.4;
   }
   50% {
-    transform: scale(1) translateY(14px);
-    opacity: 0.75;
+    transform: scale(1) translateY(12px);
+    opacity: 0.7;
   }
 }
 
-.animate-blue-glow {
-  animation: blueGlow 8s ease-in-out infinite;
+.animate-lilac-glow {
+  animation: dreamyLilacGlow 8.5s ease-in-out infinite;
 }
 
-/* Glowing Pulsing Ring */
-@keyframes pulseRing {
-  0% {
-    transform: scale(0.95);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.4;
-  }
-  100% {
-    transform: scale(0.95);
-    opacity: 0.8;
-  }
+/* Minimal Frosted Glass Panels (Soft Adorable Mochi Glass) */
+.scifi-glass-panel {
+  background: rgba(25, 14, 40, 0.65);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(244, 114, 182, 0.22);
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.5), inset 0 0 20px 0 rgba(244, 114, 182, 0.05);
 }
 
-.animate-pulse-ring {
-  animation: pulseRing 3.5s ease-in-out infinite;
+.scifi-glass-panel:hover {
+  border-color: rgba(244, 114, 182, 0.45);
+  box-shadow: 0 16px 45px -8px rgba(244, 114, 182, 0.2), inset 0 0 25px 0 rgba(244, 114, 182, 0.08);
+}
+
+/* Adorable Pastel Gradient Text */
+.text-pastel-gradient {
+  background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #fde047 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

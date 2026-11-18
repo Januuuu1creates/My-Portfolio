@@ -17,6 +17,7 @@ import {
   BrainCircuit,
   Play,
   RotateCcw,
+  Heart,
 } from "lucide-react";
 import { GithubIcon } from "./icons";
 
@@ -120,7 +121,7 @@ const projects: ProjectExperience[] = [
 export default function ProjectsShowcase() {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("axiom-ai-agent");
   const [agentStep, setAgentStep] = useState<number>(3);
-  const [pantryIngredients, setPantryIngredients] = useState<string[]>(["Tomatoes", "Garlic", "Basil"]);
+  const [pantryIngredients] = useState<string[]>(["Tomatoes", "Garlic", "Basil"]);
 
   const activeProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
 
@@ -131,31 +132,30 @@ export default function ProjectsShowcase() {
   return (
     <section
       id="projects"
-      className="py-28 relative border-b border-white/10 scroll-mt-16 overflow-hidden"
+      className="py-16 sm:py-20 relative border-b border-pink-500/15 scroll-mt-16 overflow-hidden"
     >
-      {/* Background Ambient Violet & Blue Glows */}
-      <div className="absolute top-1/3 -right-20 w-96 h-96 bg-violet-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-violet-glow" />
-      <div className="absolute bottom-10 left-0 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-blue-glow" />
+      {/* Background Soft Glows */}
+      <div className="absolute top-1/3 -right-16 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-lilac-glow" />
+      <div className="absolute bottom-10 left-0 w-80 h-80 bg-pink-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-rose-glow" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Chapter Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-14 border-b border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-14 border-b border-pink-500/15">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-violet-400 uppercase tracking-widest mb-2 font-bold">
-              <span>[05]</span>
-              <span>&mdash;</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/10 border border-pink-400/25 text-xs font-mono text-pink-300 uppercase tracking-widest mb-3 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-pink-400" />
               <span>CHAPTER 05 &bull; FEATURED PROJECTS</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Individual Case Studies
             </h2>
           </div>
-          <p className="text-xs sm:text-sm font-mono text-slate-400 mt-4 md:mt-0 max-w-sm">
+          <p className="text-xs sm:text-sm font-sans text-slate-300 mt-4 md:mt-0 max-w-sm leading-relaxed">
             Interactive visual explorations of real software systems built with verified architectures and repositories.
           </p>
         </div>
 
-        {/* Project Selector Bar */}
+        {/* Project Selector Bar (Minimal Rounded Pills) */}
         <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-10 scrollbar-none">
           {projects.map((proj) => {
             const isSelected = selectedProjectId === proj.id;
@@ -163,13 +163,13 @@ export default function ProjectsShowcase() {
               <button
                 key={proj.id}
                 onClick={() => setSelectedProjectId(proj.id)}
-                className={`group px-5 py-3 rounded-2xl text-xs font-mono uppercase tracking-wider transition-all duration-200 shrink-0 flex items-center gap-3 cursor-pointer ${
+                className={`group px-5 py-3 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-200 shrink-0 flex items-center gap-2.5 cursor-pointer scifi-glass-panel ${
                   isSelected
-                    ? "bg-violet-600 text-white font-black shadow-lg shadow-violet-600/30 border border-violet-400/50"
-                    : "bg-slate-900/60 text-slate-300 hover:text-white hover:bg-slate-900/90 border border-white/10"
+                    ? "bg-gradient-to-r from-pink-400 via-purple-400 to-sky-400 text-slate-950 font-black shadow-md shadow-pink-500/20 border-pink-300"
+                    : "border-pink-400/20 text-slate-300 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <span className={isSelected ? "text-violet-200" : "text-violet-400"}>
+                <span className={isSelected ? "text-slate-950 font-black" : "text-pink-400"}>
                   [{proj.indexNumber}]
                 </span>
                 <span>{proj.title}</span>
@@ -179,33 +179,33 @@ export default function ProjectsShowcase() {
         </div>
 
         {/* The Individual Project Stage */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Visual Mockup / Interactive Terminal Experience */}
           <div className="lg:col-span-6">
-            <div className="rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-violet-500/40 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            <div className="rounded-3xl scifi-glass-panel border-pink-400/25 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
               {/* Window Bar */}
               <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10 text-xs font-mono">
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-rose-500/80" />
-                  <span className="w-3 h-3 rounded-full bg-amber-500/80" />
-                  <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                  <span className="w-3 h-3 rounded-full bg-pink-400/80 shadow-[0_0_8px_rgba(244,114,182,0.6)]" />
+                  <span className="w-3 h-3 rounded-full bg-purple-400/80 shadow-[0_0_8px_rgba(192,132,252,0.6)]" />
+                  <span className="w-3 h-3 rounded-full bg-sky-400/80 shadow-[0_0_8px_rgba(192,132,252,0.6)]" />
                 </div>
                 <span className="text-slate-400">{activeProject.id}.preview.tsx</span>
-                <span className="text-sky-400 font-semibold">{activeProject.category}</span>
+                <span className="text-pink-300 font-semibold">{activeProject.category}</span>
               </div>
 
               {/* Bespoke Interactive Visual Stage for each project */}
               {activeProject.id === "axiom-ai-agent" && (
                 <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-black/60 border border-white/10 font-mono text-xs text-slate-200 space-y-3">
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 font-mono text-xs text-slate-200 space-y-3">
                     <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                      <div className="flex items-center gap-2 text-violet-300 font-bold">
-                        <Bot className="w-4 h-4 text-violet-400 animate-pulse" />
+                      <div className="flex items-center gap-2 text-pink-300 font-bold">
+                        <Bot className="w-4 h-4 text-pink-400" />
                         <span>AXIOM AGENT REASONING ENGINE</span>
                       </div>
                       <button
                         onClick={triggerAgentStep}
-                        className="px-2 py-1 rounded bg-violet-600/30 hover:bg-violet-600/50 text-[10px] text-violet-200 border border-violet-500/40 cursor-pointer flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-full bg-pink-500/20 hover:bg-pink-500/30 text-[10px] text-pink-200 border border-pink-400/40 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
                       >
                         <RotateCcw className="w-2.5 h-2.5" />
                         <span>Step</span>
@@ -217,29 +217,29 @@ export default function ProjectsShowcase() {
                         &gt; Target: &ldquo;Analyze execution workflow &amp; orchestrate tools&rdquo;
                       </div>
 
-                      <div className={`p-2.5 rounded-lg border transition-all ${
-                        agentStep >= 1 ? "bg-violet-950/40 border-violet-500/40 text-violet-200" : "opacity-40 border-white/5"
+                      <div className={`p-2.5 rounded-xl border transition-all ${
+                        agentStep >= 1 ? "bg-purple-950/50 border-purple-400/40 text-purple-200" : "opacity-40 border-white/5"
                       }`}>
                         [Phase 1] Task Planning: Decomposed into DAG execution graph.
                       </div>
 
-                      <div className={`p-2.5 rounded-lg border transition-all ${
-                        agentStep >= 2 ? "bg-sky-950/40 border-sky-500/40 text-sky-200" : "opacity-40 border-white/5"
+                      <div className={`p-2.5 rounded-xl border transition-all ${
+                        agentStep >= 2 ? "bg-pink-950/50 border-pink-400/40 text-pink-200" : "opacity-40 border-white/5"
                       }`}>
                         [Phase 2] Memory &amp; Vector DB: Queried semantic embeddings (similarity: 0.94).
                       </div>
 
-                      <div className={`p-2.5 rounded-lg border transition-all ${
-                        agentStep >= 3 ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-200" : "opacity-40 border-white/5"
+                      <div className={`p-2.5 rounded-xl border transition-all ${
+                        agentStep >= 3 ? "bg-emerald-950/50 border-emerald-400/40 text-emerald-200" : "opacity-40 border-white/5"
                       }`}>
                         [Phase 3] Tool Dispatch: Execution verified. Latency: 240ms. Zero Hallucinations.
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
-                    <div className="text-violet-400 font-bold">Agentic Architecture:</div>
-                    <code className="text-sky-300 block">
+                  <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
+                    <div className="text-pink-300 font-bold">Agentic Architecture:</div>
+                    <code className="text-purple-200 block">
                       AxiomAgent(memory=VectorStore, tools=[CodeExec, Analyzer])
                     </code>
                   </div>
@@ -250,8 +250,8 @@ export default function ProjectsShowcase() {
                 <div className="space-y-4">
                   <div className="p-4 rounded-2xl bg-black/40 border border-white/10 text-xs font-mono">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-bold text-sky-300">📄 PARSING RESUME METRICS</span>
-                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                      <span className="font-bold text-pink-300">📄 PARSING RESUME METRICS</span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 font-bold border border-emerald-400/40">
                         94% MATCH SCORE
                       </span>
                     </div>
@@ -259,10 +259,10 @@ export default function ProjectsShowcase() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-[11px] text-slate-300">
                         <span>NLP Keyword Extraction:</span>
-                        <span className="text-emerald-400 font-bold">Extracted 18 Entities</span>
+                        <span className="text-emerald-300 font-bold">Extracted 18 Entities</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-violet-500 to-sky-400 w-[94%]" />
+                      <div className="w-full h-2 rounded-full bg-white/5 border border-white/10 overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-pink-400 to-purple-400 w-[94%]" />
                       </div>
                     </div>
 
@@ -270,7 +270,7 @@ export default function ProjectsShowcase() {
                       {["Python", "Scikit-learn", "NLP", "TF-IDF", "Pandas", "Clean Code"].map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-violet-300 font-mono"
+                          className="px-2.5 py-1 rounded-full bg-pink-950/40 border border-pink-400/30 text-[10px] text-pink-200 font-mono"
                         >
                           ✓ {tag}
                         </span>
@@ -278,9 +278,9 @@ export default function ProjectsShowcase() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
-                    <div className="text-violet-400 font-bold">Vectorization Engine:</div>
-                    <code className="text-sky-300 block">
+                  <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
+                    <div className="text-pink-300 font-bold">Vectorization Engine:</div>
+                    <code className="text-purple-200 block">
                       cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:])
                     </code>
                   </div>
@@ -289,25 +289,25 @@ export default function ProjectsShowcase() {
 
               {activeProject.id === "cloud-automation" && (
                 <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-black/60 border border-white/10 font-mono text-xs text-slate-200 space-y-2">
-                    <div className="text-emerald-400">$ terraform init &amp;&amp; terraform apply</div>
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 font-mono text-xs text-slate-200 space-y-2">
+                    <div className="text-pink-300">$ terraform init &amp;&amp; terraform apply</div>
                     <div className="text-slate-400 text-[11px]">
                       [INFO] Initializing AWS provider plugins...
                     </div>
-                    <div className="text-sky-300 text-[11px]">
+                    <div className="text-purple-300 text-[11px]">
                       + aws_instance.web_server (EC2 t2.micro) [CREATE]
                     </div>
-                    <div className="text-violet-300 text-[11px]">
+                    <div className="text-pink-200 text-[11px]">
                       + aws_s3_bucket.secure_storage [AES-256 ENCRYPTED]
                     </div>
-                    <div className="text-emerald-400 text-[11px] font-bold">
+                    <div className="text-emerald-300 text-[11px] font-bold">
                       Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
-                    <div className="text-violet-400 font-bold">IaC Security Architecture:</div>
-                    <code className="text-sky-300 block">
+                  <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
+                    <div className="text-pink-300 font-bold">IaC Security Architecture:</div>
+                    <code className="text-purple-200 block">
                       least_privilege_iam_policy = &quot;aws_iam_policy.read_only&quot;
                     </code>
                   </div>
@@ -318,32 +318,32 @@ export default function ProjectsShowcase() {
                 <div className="space-y-4">
                   <div className="p-4 rounded-2xl bg-black/40 border border-white/10 text-xs font-mono">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-bold text-violet-300">🍳 SMART PANTRY INGREDIENTS:</span>
-                      <span className="text-sky-400">FLASK REST API</span>
+                      <span className="font-bold text-pink-300">🍳 SMART PANTRY INGREDIENTS:</span>
+                      <span className="text-purple-300 font-semibold">FLASK REST API</span>
                     </div>
 
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {pantryIngredients.map((ing) => (
                         <span
                           key={ing}
-                          className="px-2.5 py-1 rounded-lg bg-violet-600/30 border border-violet-500/40 text-violet-200 text-xs font-mono"
+                          className="px-3 py-1 rounded-full bg-pink-950/40 border border-pink-400/30 text-pink-200 text-xs font-mono"
                         >
                           {ing}
                         </span>
                       ))}
                     </div>
 
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[11px] text-slate-200 space-y-1">
-                      <span className="font-bold text-sky-300">Generated Recommendation:</span>
+                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-[11px] text-slate-200 space-y-1">
+                      <span className="font-bold text-pink-300">Generated Recommendation:</span>
                       <p className="text-slate-300">
                         Classic Fresh Basil Pasta with Blistered Tomatoes &amp; Garlic Confit. 15 min cook time. Zero waste.
                       </p>
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
-                    <div className="text-violet-400 font-bold">API Route Definition:</div>
-                    <code className="text-sky-300 block">
+                  <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 text-[11px] font-mono text-slate-300 space-y-1">
+                    <div className="text-pink-300 font-bold">API Route Definition:</div>
+                    <code className="text-purple-200 block">
                       POST /api/v1/recipes/match &#123; ingredients: [...] &#125;
                     </code>
                   </div>
@@ -354,17 +354,17 @@ export default function ProjectsShowcase() {
 
           {/* Right Column: Case Study Specifications & GitHub Action */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="p-8 sm:p-10 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl space-y-6">
+            <div className="p-8 sm:p-9 rounded-3xl scifi-glass-panel border-pink-400/25 shadow-2xl space-y-6 relative overflow-hidden">
               {/* Header */}
               <div className="pb-5 border-b border-white/10">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="font-mono text-2xl font-black text-violet-400">
+                  <span className="font-mono text-2xl font-black text-pink-400">
                     {activeProject.indexNumber}
                   </span>
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-sky-400 font-bold px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-pink-300 font-bold px-3 py-1 rounded-full bg-pink-500/10 border border-pink-400/30">
                     {activeProject.category}
                   </span>
-                  <span className="text-xs font-mono text-slate-400 ml-auto">
+                  <span className="text-xs font-mono text-purple-200/80 ml-auto">
                     {activeProject.year}
                   </span>
                 </div>
@@ -378,9 +378,9 @@ export default function ProjectsShowcase() {
               </div>
 
               {/* Project Objective */}
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                <div className="flex items-center gap-2 text-violet-300 font-bold text-xs uppercase tracking-wider mb-1 font-mono">
-                  <Target className="w-4 h-4 text-violet-400" />
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                <div className="flex items-center gap-2 text-pink-300 font-bold text-xs uppercase tracking-wider mb-1 font-mono">
+                  <Target className="w-4 h-4 text-pink-400" />
                   <span>PROJECT OBJECTIVE</span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
@@ -390,14 +390,14 @@ export default function ProjectsShowcase() {
 
               {/* Key Architectural Highlights */}
               <div>
-                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+                <h4 className="text-xs font-mono uppercase tracking-wider text-pink-300 font-bold mb-3 flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-pink-300" />
                   <span>KEY ARCHITECTURAL FEATURES</span>
                 </h4>
                 <div className="space-y-2.5">
                   {activeProject.keyHighlights.map((hl, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
-                      <span className="text-violet-400 font-bold mt-0.5">&bull;</span>
+                      <span className="text-pink-400 font-bold mt-0.5">&bull;</span>
                       <span className="leading-relaxed">{hl}</span>
                     </div>
                   ))}
@@ -406,14 +406,14 @@ export default function ProjectsShowcase() {
 
               {/* Tech Stack Chips */}
               <div className="pt-4 border-t border-white/10">
-                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-pink-300 font-bold mb-3">
                   TECHNOLOGY STACK
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {activeProject.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="text-xs font-mono px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-200 font-medium"
+                      className="text-xs font-mono px-3 py-1 rounded-xl bg-purple-950/40 border border-purple-400/30 text-purple-200 font-medium"
                     >
                       {tech}
                     </span>
@@ -421,15 +421,15 @@ export default function ProjectsShowcase() {
                 </div>
               </div>
 
-              {/* Verified GitHub Action (Clearly Labelled, No Placeholders) */}
+              {/* Verified GitHub Action */}
               <div className="pt-2">
                 <a
                   href={activeProject.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-xs font-mono font-extrabold uppercase tracking-wider text-white bg-gradient-to-r from-violet-600 via-indigo-600 to-sky-600 hover:brightness-110 shadow-lg shadow-violet-600/30 transition-all hover:scale-[1.01]"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full text-xs font-mono font-extrabold uppercase tracking-wider text-slate-950 bg-gradient-to-r from-pink-400 via-purple-400 to-sky-400 hover:brightness-110 shadow-lg shadow-pink-500/20 transition-all hover:scale-[1.01]"
                 >
-                  <GithubIcon className="w-4 h-4 text-white" />
+                  <GithubIcon className="w-4 h-4 text-slate-950" />
                   <span>Inspect on GitHub &bull; Januuuu1creates ↗</span>
                 </a>
               </div>

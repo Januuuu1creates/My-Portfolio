@@ -8,27 +8,10 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("introduction");
-  const [timeString, setTimeString] = useState("");
   const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     setIsMuted(soundFX.getMuted());
-
-    // Bengaluru live clock
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      };
-      setTimeString(now.toLocaleTimeString("en-GB", options));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -39,6 +22,7 @@ export default function Navbar() {
         "introduction",
         "about",
         "journey",
+        "skills-section",
         "workbench",
         "projects",
         "certifications",
@@ -69,71 +53,62 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: "Meet", href: "#introduction", code: "01" },
-    { name: "About", href: "#about", code: "02" },
-    { name: "Journey", href: "#journey", code: "03" },
-    { name: "Workbench", href: "#workbench", code: "04" },
-    { name: "Projects", href: "#projects", code: "05" },
-    { name: "Certs", href: "#certifications", code: "06" },
-    { name: "Connect", href: "#contact", code: "07" },
+    { name: "Meet", href: "#introduction" },
+    { name: "About", href: "#about" },
+    { name: "Journey", href: "#journey" },
+    { name: "Skills", href: "#skills-section" },
+    { name: "Workbench", href: "#workbench" },
+    { name: "Projects", href: "#projects" },
+    { name: "Certs", href: "#certifications" },
+    { name: "Connect", href: "#contact" },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#030712]/85 backdrop-blur-xl border-b border-white/10 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+          ? "bg-[#12091d]/85 backdrop-blur-2xl border-b border-pink-500/15 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
           : "bg-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Identity & Status */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <a
               href="#introduction"
               className="group flex items-center gap-3 transition-transform hover:scale-[1.02]"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 via-indigo-600 to-sky-500 flex items-center justify-center text-white font-mono font-black text-sm shadow-md shadow-violet-500/30 group-hover:shadow-violet-500/60 transition-all">
-                JM
+              <div className="relative w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-400 via-purple-400 to-sky-400 flex items-center justify-center text-white font-mono font-black text-sm shadow-[0_0_20px_rgba(244,114,182,0.4)] group-hover:shadow-[0_0_25px_rgba(244,114,182,0.7)] transition-all">
+                <span>JM</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-white text-base sm:text-lg tracking-tight group-hover:text-violet-300 transition-colors">
+                <span className="font-extrabold text-white text-base sm:text-lg tracking-tight group-hover:text-pink-300 transition-colors">
                   Jahnavi Murthy
                 </span>
-                <span className="text-[10px] font-mono tracking-wider uppercase text-sky-400 font-semibold">
-                  Software Engineer
+                <span className="text-[10px] font-mono tracking-wider uppercase text-pink-300/80 font-medium flex items-center gap-1">
+                  <span>Software Engineer</span>
+                  <span className="text-purple-400">&bull;</span>
+                  <span className="text-slate-400">CS &amp; Physics</span>
                 </span>
               </div>
             </a>
-
-            {/* Live Status & Coordinates ticker */}
-            <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-white/10 text-[11px] font-mono text-slate-300 shadow-xs">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-              <span className="text-emerald-400 font-bold">AVAILABLE</span>
-              <span className="text-slate-500">&bull;</span>
-              <span className="text-slate-300">{timeString || "14:15"} IST</span>
-            </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5">
+          {/* Desktop Navigation Links (Minimal pill style) */}
+          <nav className="hidden lg:flex items-center gap-1.5 p-1 rounded-full bg-slate-900/60 backdrop-blur-xl border border-white/10">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href.replace("#", "");
               return (
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`px-3 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-200 ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider transition-all duration-200 ${
                     isActive
-                      ? "text-violet-200 bg-violet-600/25 font-bold border border-violet-500/40 shadow-xs"
-                      : "text-slate-300 hover:text-white hover:bg-white/5"
+                      ? "text-pink-200 bg-gradient-to-r from-pink-500/25 to-purple-500/25 font-bold border border-pink-400/40 shadow-xs"
+                      : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
                   }`}
                 >
-                  <span className="text-violet-400 mr-1 opacity-70">[{link.code}]</span>
                   <span>{link.name}</span>
                 </a>
               );
@@ -143,103 +118,56 @@ export default function Navbar() {
             <button
               onClick={toggleSound}
               type="button"
-              className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer ml-1"
-              title={isMuted ? "Unmute audio chimes" : "Mute audio chimes"}
+              className="p-2 rounded-full text-slate-400 hover:text-pink-300 hover:bg-white/5 transition-all cursor-pointer ml-1"
+              title={isMuted ? "Unmute audio" : "Mute audio"}
               aria-label="Toggle sound"
             >
               {isMuted ? (
                 <VolumeX className="w-3.5 h-3.5 text-slate-500" />
               ) : (
-                <Volume2 className="w-3.5 h-3.5 text-violet-400" />
+                <Volume2 className="w-3.5 h-3.5 text-pink-400" />
               )}
             </button>
-
-            {/* CTA Talk Button */}
-            <div className="ml-2 pl-2 border-l border-white/10">
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-mono font-extrabold uppercase tracking-wider text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 shadow-md shadow-violet-600/30 hover:scale-[1.02] transition-all"
-              >
-                <span>Let&apos;s Talk</span>
-                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-            </div>
           </nav>
 
-          {/* Mobile Navigation Toggle Button */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Menu Button */}
+          <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={toggleSound}
-              type="button"
-              className="p-2 rounded-xl bg-slate-900/80 text-slate-400 hover:text-white border border-white/10"
-              title={isMuted ? "Unmute sound" : "Mute sound"}
-              aria-label="Toggle sound"
+              className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/5 border border-white/10"
+              aria-label="Toggle audio"
             >
               {isMuted ? (
-                <VolumeX className="w-4 h-4 text-slate-500" />
+                <VolumeX className="w-4 h-4 text-slate-400" />
               ) : (
-                <Volume2 className="w-4 h-4 text-violet-400" />
+                <Volume2 className="w-4 h-4 text-pink-400" />
               )}
             </button>
-
             <button
               onClick={() => setIsOpen(!isOpen)}
-              type="button"
-              className="p-2.5 rounded-xl bg-slate-900 text-slate-200 hover:text-white hover:bg-slate-800 border border-white/10 transition-colors"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isOpen}
+              className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/5 border border-white/10"
+              aria-label="Open menu"
             >
-              {isOpen ? (
-                <X className="w-5 h-5 text-violet-400" />
-              ) : (
-                <Menu className="w-5 h-5 text-violet-400" />
-              )}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden bg-[#030712]/95 backdrop-blur-2xl border-b border-white/15 px-6 pt-4 pb-8 transition-all animate-in fade-in slide-in-from-top-2">
-          <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 text-xs font-mono text-slate-400">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="text-emerald-400 font-bold">AVAILABLE FOR WORK</span>
-            </div>
-            <span>{timeString} IST</span>
-          </div>
-
-          <div className="flex flex-col space-y-2">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href.replace("#", "");
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-mono uppercase tracking-wider transition-all ${
-                    isActive
-                      ? "text-violet-200 bg-violet-600/25 font-bold border border-violet-500/40"
-                      : "text-slate-300 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  <span>{link.name}</span>
-                  <span className="text-violet-400 opacity-80">[{link.code}]</span>
-                </a>
-              );
-            })}
-
-            <div className="pt-3">
+        <div className="lg:hidden mt-3 mx-4 p-4 rounded-3xl bg-[#0b0d1e]/95 backdrop-blur-2xl border border-pink-500/20 shadow-2xl animate-in fade-in duration-200">
+          <div className="flex flex-col gap-2">
+            {navLinks.map((link) => (
               <a
-                href="#contact"
+                key={link.name}
+                href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl text-center text-xs font-mono font-bold uppercase tracking-wider text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 shadow-md shadow-violet-600/30"
+                className="px-4 py-2.5 rounded-2xl text-xs font-mono uppercase tracking-wider text-slate-200 hover:text-pink-200 hover:bg-white/5 transition-colors"
               >
-                <span>Let&apos;s Talk</span>
-                <ArrowUpRight className="w-4 h-4" />
+                {link.name}
               </a>
-            </div>
+            ))}
           </div>
         </div>
       )}

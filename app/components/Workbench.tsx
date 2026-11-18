@@ -10,7 +10,8 @@ import {
   Sparkles,
   Cpu,
   CheckCircle2,
-  ExternalLink,
+  Wrench,
+  Heart,
 } from "lucide-react";
 
 interface SkillDetail {
@@ -171,7 +172,7 @@ export default function Workbench() {
   const [selectedSkill, setSelectedSkill] = useState<SkillDetail>(skills[0]);
 
   const categories = [
-    { label: "All [14]", value: "All" },
+    { label: "All (14)", value: "All" },
     { label: "Languages", value: "Languages" },
     { label: "Backend & APIs", value: "Backend" },
     { label: "Frontend", value: "Frontend" },
@@ -187,39 +188,38 @@ export default function Workbench() {
   return (
     <section
       id="workbench"
-      className="py-28 relative border-b border-white/10 scroll-mt-16 overflow-hidden"
+      className="py-16 sm:py-20 relative border-b border-pink-500/15 scroll-mt-16 overflow-hidden"
     >
-      {/* Background Ambient Glows */}
-      <div className="absolute top-1/2 left-10 w-96 h-96 bg-violet-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-violet-glow" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-blue-glow" />
+      {/* Background Soft Ambient Glows */}
+      <div className="absolute top-1/2 left-8 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-lilac-glow" />
+      <div className="absolute bottom-10 right-8 w-80 h-80 bg-pink-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-rose-glow" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Chapter Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-16 border-b border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-14 border-b border-pink-500/15">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-violet-400 uppercase tracking-widest mb-2 font-bold">
-              <span>[04]</span>
-              <span>&mdash;</span>
-              <span>CHAPTER 04 &bull; WHAT I WORK WITH</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/10 border border-pink-400/25 text-xs font-mono text-pink-300 uppercase tracking-widest mb-3 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-pink-400" />
+              <span>CHAPTER 04-B &bull; WHAT I WORK WITH</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               The Engineering Workbench
             </h2>
           </div>
-          <p className="text-xs sm:text-sm font-mono text-slate-400 mt-4 md:mt-0 max-w-sm">
+          <p className="text-xs sm:text-sm font-sans text-slate-300 mt-4 md:mt-0 max-w-sm leading-relaxed">
             An interactive inspection lab of the languages, frameworks, cloud tools, and software concepts I use to craft code.
           </p>
         </div>
 
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap gap-2 mb-10 p-1.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 w-fit">
+        {/* Category Filter Pills (Minimal Rounded Style) */}
+        <div className="flex flex-wrap gap-2 mb-10 p-1.5 scifi-glass-panel rounded-full border-pink-400/25 w-fit">
           {categories.map((cat) => (
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className={`px-4 py-2 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer ${
                 activeCategory === cat.value
-                  ? "bg-violet-600 text-white font-bold shadow-md shadow-violet-600/30"
+                  ? "bg-gradient-to-r from-pink-400 via-purple-400 to-sky-400 text-slate-950 font-bold shadow-md shadow-pink-500/20"
                   : "text-slate-300 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -232,35 +232,35 @@ export default function Workbench() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Interactive Skill Chips Grid */}
           <div className="lg:col-span-7">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {filteredSkills.map((skill) => {
                 const isSelected = selectedSkill.id === skill.id;
                 return (
                   <div
                     key={skill.id}
                     onClick={() => setSelectedSkill(skill)}
-                    className={`group p-4 sm:p-5 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                    className={`group p-5 rounded-3xl border transition-all duration-200 cursor-pointer scifi-glass-panel ${
                       isSelected
-                        ? "bg-slate-900/95 border-violet-500 shadow-[0_4px_20px_rgba(139,92,246,0.3)] -translate-y-0.5"
-                        : "bg-slate-900/40 border-white/10 hover:border-violet-500/40 hover:bg-slate-900/70"
+                        ? "bg-white/[0.08] border-pink-400 shadow-[0_0_25px_rgba(244,114,182,0.25)] -translate-y-0.5"
+                        : "border-pink-400/20 hover:border-pink-400/40 hover:bg-white/[0.04]"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-mono font-bold text-white group-hover:text-violet-300 transition-colors">
+                      <span className="text-xs font-mono font-bold text-white group-hover:text-pink-300 transition-colors">
                         {skill.name}
                       </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-sky-300 border border-sky-400/20">
+                      <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-pink-500/10 text-pink-300 border border-pink-400/30">
                         {skill.level}
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-400 leading-snug line-clamp-2">
+                    <p className="text-xs text-slate-300 leading-snug line-clamp-2 font-sans">
                       {skill.tagline}
                     </p>
 
-                    <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                      <span className="text-violet-400 font-semibold">{skill.category}</span>
-                      <span className="text-slate-500 group-hover:text-violet-300 transition-colors">
+                    <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-purple-300/80">
+                      <span className="font-semibold">{skill.category}</span>
+                      <span className={`transition-colors ${isSelected ? "text-pink-300 font-bold" : "text-slate-400 group-hover:text-pink-300"}`}>
                         {isSelected ? "● ACTIVE" : "Inspect →"}
                       </span>
                     </div>
@@ -272,40 +272,40 @@ export default function Workbench() {
 
           {/* Right Column: Workbench Inspector Panel */}
           <div className="lg:col-span-5">
-            <div className="sticky top-28 p-7 sm:p-8 rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-violet-500/40 shadow-2xl space-y-6">
+            <div className="sticky top-28 p-7 sm:p-8 rounded-3xl scifi-glass-panel border-pink-400/30 shadow-2xl space-y-6 relative overflow-hidden">
               {/* Header */}
               <div className="flex items-start justify-between pb-5 border-b border-white/10">
                 <div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-sky-400 font-bold mb-1">
-                    <Sparkles className="w-3.5 h-3.5 text-violet-400" />
+                  <div className="flex items-center gap-2 text-xs font-mono text-pink-300 font-bold mb-1">
+                    <Sparkles className="w-3.5 h-3.5 text-pink-400" />
                     <span className="uppercase tracking-wider">{selectedSkill.category}</span>
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black text-white">
                     {selectedSkill.name}
                   </h3>
-                  <p className="text-xs font-mono text-violet-300 mt-1 font-semibold">
+                  <p className="text-xs font-mono text-purple-300 mt-1 font-semibold">
                     {selectedSkill.level}
                   </p>
                 </div>
 
-                <div className="w-10 h-10 rounded-2xl bg-violet-600/20 border border-violet-500/40 flex items-center justify-center text-violet-300 shrink-0">
+                <div className="w-10 h-10 rounded-2xl bg-pink-500/20 border border-pink-400/40 flex items-center justify-center text-pink-300 shrink-0 shadow-[0_0_12px_rgba(244,114,182,0.3)]">
                   <Terminal className="w-5 h-5" />
                 </div>
               </div>
 
               {/* Tagline */}
               <div>
-                <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold mb-1">
+                <h4 className="text-[10px] font-mono uppercase tracking-wider text-pink-300 font-bold mb-1">
                   CORE PURPOSE
                 </h4>
-                <p className="text-sm font-mono text-sky-300 font-medium">
+                <p className="text-sm font-mono text-pink-200 font-medium">
                   {selectedSkill.tagline}
                 </p>
               </div>
 
               {/* Context */}
               <div>
-                <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold mb-1.5">
+                <h4 className="text-[10px] font-mono uppercase tracking-wider text-pink-300 font-bold mb-1.5">
                   HOW I APPLY IT IN PRACTICE
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
@@ -314,12 +314,12 @@ export default function Workbench() {
               </div>
 
               {/* Projects Where Utilized */}
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                <h4 className="text-[10px] font-mono uppercase tracking-wider text-violet-400 font-bold mb-1 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                <h4 className="text-[10px] font-mono uppercase tracking-wider text-pink-300 font-bold mb-1 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-pink-400" />
                   <span>IMPLEMENTED IN REAL PROJECTS</span>
                 </h4>
-                <p className="text-xs font-mono text-slate-300 leading-relaxed mt-1">
+                <p className="text-xs font-mono text-purple-200/90 leading-relaxed mt-1">
                   {selectedSkill.appliedIn}
                 </p>
               </div>

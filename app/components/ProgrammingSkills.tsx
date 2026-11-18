@@ -11,6 +11,7 @@ import {
   GitBranch,
   BrainCircuit,
   Binary,
+  Heart,
 } from "lucide-react";
 
 interface SkillItem {
@@ -113,13 +114,12 @@ export default function ProgrammingSkills() {
   const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
-    // Trigger smooth bar animation when component mounts
     const timer = setTimeout(() => setAnimated(true), 150);
     return () => clearTimeout(timer);
   }, []);
 
   const categories = [
-    { label: "All Skills [12]", value: "All" },
+    { label: "All Skills (12)", value: "All" },
     { label: "Core Languages", value: "Languages" },
     { label: "Frontend & Web", value: "Frontend" },
     { label: "Backend & Systems", value: "Backend" },
@@ -134,39 +134,38 @@ export default function ProgrammingSkills() {
   return (
     <section
       id="skills-section"
-      className="py-24 relative border-b border-white/10 scroll-mt-16 overflow-hidden"
+      className="py-16 sm:py-20 relative border-b border-pink-500/15 scroll-mt-16 overflow-hidden"
     >
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/2 left-10 w-96 h-96 bg-violet-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-violet-glow" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-blue-glow" />
+      <div className="absolute top-1/2 left-8 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-lilac-glow" />
+      <div className="absolute bottom-10 right-8 w-80 h-80 bg-pink-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-rose-glow" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-12 border-b border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-12 border-b border-pink-500/15">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-violet-400 uppercase tracking-widest mb-2 font-bold">
-              <span>[04-A]</span>
-              <span>&mdash;</span>
-              <span>TECHNICAL PROFICIENCIES</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/10 border border-pink-400/25 text-xs font-mono text-pink-300 uppercase tracking-widest mb-3 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-pink-400" />
+              <span>CHAPTER 04-A &bull; TECHNICAL PROFICIENCIES</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Programming Skills
             </h2>
           </div>
-          <p className="text-xs sm:text-sm font-mono text-slate-400 mt-4 md:mt-0 max-w-sm">
+          <p className="text-xs sm:text-sm font-sans text-slate-300 mt-4 md:mt-0 max-w-sm leading-relaxed">
             Verified technical proficiencies with animated proficiency bars across core languages, frameworks, and system design.
           </p>
         </div>
 
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap gap-2 mb-10 p-1.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 w-fit">
+        {/* Category Filter Pills (Minimal Rounded Style) */}
+        <div className="flex flex-wrap gap-2 mb-10 p-1.5 scifi-glass-panel rounded-full border-pink-400/25 w-fit">
           {categories.map((cat) => (
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className={`px-4 py-2 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer ${
                 activeCategory === cat.value
-                  ? "bg-violet-600 text-white font-bold shadow-md shadow-violet-600/30"
+                  ? "bg-gradient-to-r from-pink-400 via-purple-400 to-sky-400 text-slate-950 font-bold shadow-md shadow-pink-500/20"
                   : "text-slate-300 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -175,35 +174,35 @@ export default function ProgrammingSkills() {
           ))}
         </div>
 
-        {/* Animated Skills Grid with Percentage Bars */}
+        {/* Animated Skills Grid with Adorable Pastel Bars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filtered.map((skill) => (
             <div
               key={skill.name}
-              className="p-6 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-white/10 hover:border-violet-500/50 hover:bg-slate-900/80 transition-all duration-300 shadow-xl group"
+              className="p-6 rounded-3xl scifi-glass-panel border-pink-400/20 hover:border-pink-400/50 hover:bg-white/[0.04] transition-all duration-300 shadow-xl group relative overflow-hidden"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2 h-2 rounded-full bg-violet-400 group-hover:scale-125 transition-transform" />
-                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-violet-300 transition-colors">
+                  <span className="w-2.5 h-2.5 rounded-full bg-pink-400 group-hover:scale-125 transition-transform shadow-[0_0_8px_#f472b6]" />
+                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-pink-300 transition-colors">
                     {skill.name}
                   </h3>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-sky-300 border border-sky-400/20">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-pink-500/10 text-pink-300 border border-pink-400/30">
                     {skill.level}
                   </span>
-                  <span className="text-sm font-mono font-black text-violet-300">
+                  <span className="text-sm font-mono font-black text-pink-300">
                     {skill.percentage}%
                   </span>
                 </div>
               </div>
 
-              {/* Animated Progress Bar */}
-              <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden relative p-[2px] mt-2 mb-3">
+              {/* Animated Pastel Gradient Bar */}
+              <div className="w-full h-3 rounded-full bg-white/5 border border-white/10 overflow-hidden relative p-[2px] mt-2 mb-3 shadow-inner">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-violet-600 via-indigo-500 to-sky-400 transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(139,92,246,0.6)] relative"
+                  className="h-full rounded-full bg-gradient-to-r from-pink-400 via-rose-300 to-purple-400 transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(244,114,182,0.6)] relative"
                   style={{
                     width: animated ? `${skill.percentage}%` : "0%",
                   }}
@@ -220,6 +219,7 @@ export default function ProgrammingSkills() {
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );

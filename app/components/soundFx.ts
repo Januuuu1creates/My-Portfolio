@@ -45,7 +45,7 @@ class SoundFX {
     }
   }
 
-  // Sweet joyful robot chime (chord: C5, E5, G5)
+  // Sweet joyful chime (chord: C5, E5, G5)
   public playChime() {
     if (this.isMuted) return;
     const ctx = this.initContext();
@@ -95,6 +95,30 @@ class SoundFX {
 
     osc.start(now);
     osc.stop(now + 0.22);
+  }
+
+  // Subtle telemetry click
+  public playClick() {
+    if (this.isMuted) return;
+    const ctx = this.initContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(600, now);
+    osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+
+    gain.gain.setValueAtTime(0.02, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.06);
   }
 }
 

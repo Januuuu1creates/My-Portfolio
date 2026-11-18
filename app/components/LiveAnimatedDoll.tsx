@@ -7,16 +7,14 @@ import {
   VolumeX,
   Play,
   Pause,
-  MessageSquare,
   Smile,
   Compass,
-  Zap,
-  CheckCircle,
+  ArrowUpDown,
+  MessageSquare,
+  Bot,
 } from "lucide-react";
 import { soundFX } from "./soundFx";
 import { ttsVoice } from "./ttsVoice";
-
-export type AnimationMode = "idle" | "walking" | "waving" | "explaining";
 
 export interface GuideTopic {
   id: string;
@@ -76,69 +74,42 @@ export const GUIDE_TOPICS: GuideTopic[] = [
 ];
 
 export default function LiveAnimatedDoll() {
-  const [animMode, setAnimMode] = useState<AnimationMode>("idle");
   const [currentTopic, setCurrentTopic] = useState<GuideTopic>(GUIDE_TOPICS[0]);
   const [isVoiceMuted, setIsVoiceMuted] = useState(false);
   const [isVoicePlaying, setIsVoicePlaying] = useState(false);
   const [isVoicePaused, setIsVoicePaused] = useState(false);
 
-  // Character Kinematics State
-  const [headTilt, setHeadTilt] = useState(0);
-  const [headTurn, setHeadTurn] = useState(0);
-  const [headNod, setHeadNod] = useState(0);
-  const [isBlinking, setIsBlinking] = useState(false);
+  // Doll Articulation States
+  const [isWalkingUpDown, setIsWalkingUpDown] = useState(true);
+  const [isWaving, setIsWaving] = useState(false);
   const [isWinking, setIsWinking] = useState(false);
-  const [breathScale, setBreathScale] = useState(1);
-  const [walkOffset, setWalkOffset] = useState(0);
-  const [bodySway, setBodySway] = useState(0);
-  const [armAngle, setArmAngle] = useState(0);
-  const [mouthOpen, setMouthOpen] = useState(0);
+  const [blinking, setBlinking] = useState(false);
+  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const [headTilt, setHeadTilt] = useState({ x: 0, y: 0 });
+  const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [sparkles, setSparkles] = useState<{ id: number; char: string; x: number; y: number }[]>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const animFrameRef = useRef<number | null>(null);
-  const mousePosRef = useRef({ x: 0, y: 0 });
 
-  // Subscribe to TTS Voice controller
+  // Subscribe to voice controller
   useEffect(() => {
     setIsVoiceMuted(ttsVoice.getMuted());
     const unsubscribe = ttsVoice.subscribe(({ isSpeaking, isPaused }) => {
       setIsVoicePlaying(isSpeaking && !isPaused);
       setIsVoicePaused(isPaused);
-      if (isSpeaking && !isPaused) {
-        setAnimMode("explaining");
-      }
     });
     return unsubscribe;
   }, []);
 
-  // Mouse tracking for head and gaze
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      mousePosRef.current = {
-        x: (e.clientX - centerX) / (window.innerWidth / 2),
-        y: (e.clientY - centerY) / (window.innerHeight / 2),
-      };
-    };
-
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Periodic natural blinking cycle
+  // Natural Blinking
   useEffect(() => {
     let blinkTimer: NodeJS.Timeout;
     const scheduleNextBlink = () => {
-      const delay = 3200 + Math.random() * 2500;
+      const delay = 3000 + Math.random() * 2500;
       blinkTimer = setTimeout(() => {
-        setIsBlinking(true);
+        setBlinking(true);
         setTimeout(() => {
-          setIsBlinking(false);
+          setBlinking(false);
           scheduleNextBlink();
         }, 160);
       }, delay);
@@ -148,72 +119,38 @@ export default function LiveAnimatedDoll() {
     return () => clearTimeout(blinkTimer);
   }, []);
 
-  // Main 60 FPS Kinematics Animation Loop
+  // Mouse Tracking for 3D Head Tilt and Eyes
   useEffect(() => {
-    let startTime = performance.now();
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-    const loop = (currentTime: number) => {
-      const elapsed = (currentTime - startTime) / 1000;
+      const deltaX = (e.clientX - centerX) / (window.innerWidth / 2);
+      const deltaY = (e.clientY - centerY) / (window.innerHeight / 2);
 
-      // 1. Natural Breathing (Sine wave rhythm)
-      const breath = 1 + Math.sin(elapsed * 2.2) * 0.025;
-      setBreathScale(breath);
+      const maxOffset = 5;
+      setEyeOffset({
+        x: Math.max(-maxOffset, Math.min(maxOffset, deltaX * maxOffset)),
+        y: Math.max(-maxOffset, Math.min(maxOffset, deltaY * maxOffset)),
+      });
 
-      // 2. Mouse Target Smooth Interpolation
-      const targetTilt = mousePosRef.current.x * 6 + Math.sin(elapsed * 1.5) * 2;
-      const targetTurn = mousePosRef.current.x * 12;
-      const targetNod = mousePosRef.current.y * 8 + Math.sin(elapsed * 2.2) * 1.5;
-
-      setHeadTilt((prev) => prev + (targetTilt - prev) * 0.1);
-      setHeadTurn((prev) => prev + (targetTurn - prev) * 0.1);
-      setHeadNod((prev) => prev + (targetNod - prev) * 0.1);
-
-      // 3. Locomotion & Posture by Animation Mode
-      if (animMode === "walking") {
-        setWalkOffset(Math.sin(elapsed * 1.8) * 28);
-        setBodySway(Math.cos(elapsed * 1.8) * 4);
-        setArmAngle(Math.sin(elapsed * 3.6) * 14);
-        setMouthOpen(0);
-      } else if (animMode === "waving") {
-        setWalkOffset(0);
-        setBodySway(Math.sin(elapsed * 2) * 2);
-        // Rapid wave gesture (8 Hz)
-        const waveAngle = -65 + Math.sin(elapsed * 8) * 22;
-        setArmAngle(waveAngle);
-        setMouthOpen(2);
-      } else if (animMode === "explaining") {
-        setWalkOffset(0);
-        setBodySway(Math.sin(elapsed * 1.2) * 1.5);
-        // Emphatic gestures
-        const gestureAngle = -28 + Math.sin(elapsed * 3.2) * 18;
-        setArmAngle(gestureAngle);
-        // Mouth movement while speaking
-        const mouth = Math.abs(Math.sin(elapsed * 10)) * 5;
-        setMouthOpen(mouth);
-      } else {
-        // Idle mode
-        setWalkOffset(0);
-        setBodySway(Math.sin(elapsed * 1.5) * 1.5);
-        setArmAngle(Math.sin(elapsed * 2) * 4);
-        setMouthOpen(0);
-      }
-
-      animFrameRef.current = requestAnimationFrame(loop);
+      setHeadTilt({
+        x: Math.max(-10, Math.min(10, -deltaY * 8)),
+        y: Math.max(-14, Math.min(14, deltaX * 12)),
+      });
     };
 
-    animFrameRef.current = requestAnimationFrame(loop);
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [animMode]);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   // Topic Selection & TTS Action
   const selectTopic = (topic: GuideTopic) => {
     soundFX.playSparkle();
     setCurrentTopic(topic);
-    setAnimMode("explaining");
 
-    // Speak topic text
     ttsVoice.speak(
       topic.speechText,
       () => {
@@ -223,14 +160,20 @@ export default function LiveAnimatedDoll() {
       () => {
         setIsVoicePlaying(false);
         setIsVoicePaused(false);
-        setAnimMode("idle");
       }
     );
+
+    if (topic.targetId) {
+      const el = document.getElementById(topic.targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
   };
 
-  const handleWaveClick = () => {
+  const handleDollTap = () => {
     soundFX.playChime();
-    setAnimMode("waving");
+    setIsWaving(true);
     setIsWinking(true);
 
     const emojis = ["✨", "🌟", "💜", "💙", "⚡", "👋"];
@@ -244,20 +187,29 @@ export default function LiveAnimatedDoll() {
         y: -30 - Math.random() * 20,
       },
     ]);
+
+    const messages = [
+      "✨ 'Beep boop! Jahnavi's companion at your service!'",
+      "💜 'Check her Gainwell Technologies experience & AXIOM AI Agent!'",
+      "↕️ 'Walking up and down through her interactive portfolio!'",
+      "🌟 'Ask me any topic above to hear me speak!'",
+    ];
+    setActionNotice(messages[Math.floor(Math.random() * messages.length)]);
+
     setTimeout(() => {
       setSparkles((prev) => prev.filter((s) => s.id !== id));
       setIsWinking(false);
-      if (!isVoicePlaying) setAnimMode("idle");
-    }, 2400);
+      setIsWaving(false);
+    }, 2200);
+
+    setTimeout(() => setActionNotice(null), 3500);
   };
 
   const toggleVoicePlayPause = () => {
     if (isVoicePlaying) {
       ttsVoice.pause();
-      setAnimMode("idle");
     } else if (isVoicePaused) {
       ttsVoice.resume();
-      setAnimMode("explaining");
     } else {
       selectTopic(currentTopic);
     }
@@ -266,9 +218,6 @@ export default function LiveAnimatedDoll() {
   const toggleVoiceMute = () => {
     const nextMuted = ttsVoice.toggleMute();
     setIsVoiceMuted(nextMuted);
-    if (nextMuted) {
-      setAnimMode("idle");
-    }
   };
 
   return (
@@ -280,7 +229,7 @@ export default function LiveAnimatedDoll() {
       {sparkles.map((sp) => (
         <div
           key={sp.id}
-          className="absolute z-30 text-2xl pointer-events-none animate-bounce"
+          className="absolute z-40 text-2xl pointer-events-none animate-bounce"
           style={{
             transform: `translate(${sp.x}px, ${sp.y}px)`,
             filter: "drop-shadow(0 0 8px rgba(139, 92, 246, 0.8))",
@@ -290,8 +239,8 @@ export default function LiveAnimatedDoll() {
         </div>
       ))}
 
-      {/* Speech Bubble Guide Console */}
-      <div className="relative z-20 mb-6 w-full">
+      {/* SPEECH BUBBLE GUIDE CONSOLE */}
+      <div className="relative z-30 mb-4 w-full">
         <div className="p-5 sm:p-6 rounded-3xl bg-slate-950/90 backdrop-blur-xl border border-violet-500/40 shadow-[0_15px_45px_rgba(139,92,246,0.25)] space-y-3">
           {/* Header Bar */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs font-mono">
@@ -305,7 +254,7 @@ export default function LiveAnimatedDoll() {
               <button
                 onClick={toggleVoicePlayPause}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-violet-600/30 hover:bg-violet-600/50 border border-violet-500/40 text-violet-200 text-[11px] font-mono transition-all cursor-pointer"
-                title={isVoicePlaying ? "Pause voice" : "Play voice"}
+                title={isVoicePlaying ? "Pause voice narration" : "Play voice narration"}
               >
                 {isVoicePlaying ? (
                   <>
@@ -337,13 +286,22 @@ export default function LiveAnimatedDoll() {
 
           {/* Topic Title & Conversational Explanation */}
           <div>
-            <h4 className="text-base sm:text-lg font-bold text-white mb-1.5">
-              {currentTopic.title}
+            <h4 className="text-base sm:text-lg font-bold text-white mb-1.5 flex items-center gap-2">
+              <Bot className="w-4 h-4 text-violet-400" />
+              <span>{currentTopic.title}</span>
             </h4>
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans min-h-[54px]">
               &ldquo;{currentTopic.speechText}&rdquo;
             </p>
           </div>
+
+          {/* Action Notice Toast */}
+          {actionNotice && (
+            <div className="text-xs font-mono text-violet-200 bg-violet-950/60 p-2.5 rounded-xl border border-violet-400/40 animate-in fade-in flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-sky-400 shrink-0" />
+              <span>{actionNotice}</span>
+            </div>
+          )}
 
           {/* Clickable Topics to Ask Her About */}
           <div className="pt-3 border-t border-white/10">
@@ -375,196 +333,94 @@ export default function LiveAnimatedDoll() {
         <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[10px] border-t-slate-950/90 mx-auto -mt-[1px]" />
       </div>
 
-      {/* The Live Articulated Character Stage */}
-      <div className="relative flex flex-col items-center">
-        {/* Holographic Glowing Violet & Electric Blue Ambience */}
-        <div className="absolute -inset-8 rounded-full bg-gradient-to-tr from-violet-600/30 via-indigo-600/20 to-sky-500/30 blur-2xl pointer-events-none -z-10 animate-violet-glow" />
+      {/* THE PHOTOREALISTIC 3D DOLL COMPANION */}
+      <div
+        onClick={handleDollTap}
+        className={`relative w-72 h-88 sm:w-80 sm:h-[400px] cursor-pointer flex flex-col items-center justify-center select-none ${
+          isWalkingUpDown ? "animate-walk-up-down" : ""
+        } ${isWaving ? "rotate-2 scale-105" : ""}`}
+        title="Tap me! I'm Jahnavi Murthy's 3D robot companion!"
+      >
+        {/* Holographic Violet & Blue Ambient Lighting */}
+        <div className="absolute inset-0 rounded-full bg-violet-600/25 blur-2xl -z-10 animate-pulse pointer-events-none" />
+        <div className="absolute bottom-2 w-56 h-10 rounded-full bg-sky-500/20 blur-xl -z-10 pointer-events-none" />
+        <div className="absolute bottom-0 w-44 h-6 rounded-full bg-black/70 blur-md -z-10 pointer-events-none" />
 
-        {/* Dynamic Ground Shadow that shifts and scales with walk/hover */}
+        {/* 3D Model Container with Head Tilt and Breathing */}
         <div
-          className="absolute bottom-1 w-44 h-8 rounded-full bg-violet-600/25 blur-lg pointer-events-none transition-all duration-150"
           style={{
-            transform: `translateX(${walkOffset}px) scale(${1 - Math.abs(walkOffset) * 0.005})`,
+            transform: `rotateX(${headTilt.x}deg) rotateY(${headTilt.y}deg)`,
+            transformStyle: "preserve-3d",
+            transition: "transform 0.12s ease-out",
           }}
-        />
-
-        {/* Articulated Doll Container */}
-        <div
-          onClick={handleWaveClick}
-          className="relative cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
-          title="Click to interact with Jahnavi's animated companion!"
-          style={{
-            transform: `translateX(${walkOffset}px) rotate(${bodySway}deg)`,
-          }}
+          className="relative w-full h-full flex flex-col items-center justify-center animate-robot-breathe [perspective:1000px]"
         >
-          {/* Main Rig Wrapper */}
-          <div className="relative w-56 h-64 sm:w-64 sm:h-72 flex items-center justify-center">
-            {/* 1. Body & Torso Layer (Natural Breathing & Posture) */}
-            <div
-              className="absolute inset-0 flex items-center justify-center"
-              style={{
-                transform: `scale(1, ${breathScale})`,
-                transformOrigin: "bottom center",
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/robot_realistic.png"
-                alt="Jahnavi's 3D Robot"
-                className="w-full h-full object-contain pointer-events-none drop-shadow-[0_15px_35px_rgba(139,92,246,0.5)]"
+          {/* THE PHOTOREALISTIC 3D ROBOT IMAGE */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/robot_realistic.png"
+            alt="Jahnavi's 3D Robot Doll"
+            className="w-auto h-full max-h-[360px] sm:max-h-[390px] object-contain drop-shadow-[0_20px_40px_rgba(139,92,246,0.6)] pointer-events-none transition-transform duration-300"
+          />
+
+          {/* INTERACTIVE MOVING EYE SPECULAR GLINTS */}
+          <div className="absolute top-[38%] left-[46%] w-8 h-8 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            {!blinking && (
+              <div
+                className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)] opacity-95 transition-transform duration-75 ease-out"
+                style={{
+                  transform: `translate(${eyeOffset.x * 0.7}px, ${eyeOffset.y * 0.7}px)`,
+                }}
               />
-            </div>
-
-            {/* 2. Independent Head Group (Tilts, Nods, Turns smoothly) */}
-            <div
-              className="absolute top-0 w-full h-[60%] pointer-events-none"
-              style={{
-                transform: `rotateZ(${headTilt}deg) rotateY(${headTurn}deg) rotateX(${headNod}deg)`,
-                transformOrigin: "50% 90%",
-                transition: "transform 0.08s ease-out",
-              }}
-            >
-              {/* Eyelids Over Left Eye (Realistic blinking) */}
-              <div
-                className="absolute transition-all duration-75"
-                style={{
-                  top: "39%",
-                  left: "46%",
-                  width: "22px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  className="w-full bg-[#523326] transition-all duration-75"
-                  style={{
-                    height: isBlinking || isWinking ? "100%" : "0%",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.5)",
-                  }}
-                />
-              </div>
-
-              {/* Eyelids Over Right Eye (Realistic blinking, winking) */}
-              <div
-                className="absolute transition-all duration-75"
-                style={{
-                  top: "38%",
-                  left: "64%",
-                  width: "25px",
-                  height: "30px",
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  className="w-full bg-[#523326] transition-all duration-75"
-                  style={{
-                    height: isBlinking ? "100%" : "0%",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.5)",
-                  }}
-                />
-              </div>
-
-              {/* Articulated Mouth Opening & Closing when Explaining */}
-              {mouthOpen > 0 && (
-                <div
-                  className="absolute rounded-full bg-[#3a2219] border border-[#ffbf69]/30 transition-all duration-75"
-                  style={{
-                    top: "54%",
-                    left: "55%",
-                    width: "12px",
-                    height: `${mouthOpen}px`,
-                    transform: "translateX(-50%)",
-                  }}
-                />
-              )}
-            </div>
-
-            {/* 3. Articulated Waving Arm Overlay (Shoulder Pivot) */}
-            {animMode === "waving" && (
-              <div
-                className="absolute pointer-events-none"
-                style={{
-                  top: "56%",
-                  right: "26%",
-                  width: "56px",
-                  height: "56px",
-                  transform: `rotate(${armAngle}deg)`,
-                  transformOrigin: "top left",
-                  transition: "transform 0.05s linear",
-                }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/robot_arm_wave.png"
-                  alt="Waving Arm"
-                  className="w-full h-full object-contain drop-shadow-[0_5px_12px_rgba(139,92,246,0.6)]"
-                />
-              </div>
             )}
+          </div>
 
-            {/* Glowing Name Badge */}
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-slate-950/95 border border-violet-400/80 shadow-[0_0_15px_rgba(139,92,246,0.6)] text-[9px] font-mono font-black text-violet-200 tracking-widest uppercase whitespace-nowrap">
-              JAHNAVI
+          <div className="absolute top-[40%] left-[64%] w-8 h-8 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            {!blinking && !isWinking && (
+              <div
+                className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)] opacity-95 transition-transform duration-75 ease-out"
+                style={{
+                  transform: `translate(${eyeOffset.x * 0.6}px, ${eyeOffset.y * 0.6}px)`,
+                }}
+              />
+            )}
+          </div>
+
+          {/* JAHNAVI NAME BADGE */}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 pointer-events-none z-30">
+            <div className="px-3.5 py-1 rounded-full bg-slate-950/95 backdrop-blur-md border border-violet-400/80 shadow-[0_0_15px_rgba(139,92,246,0.8)] flex items-center gap-1.5 animate-pulse">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 shadow-sm shadow-violet-400" />
+              <span className="text-[10px] font-mono font-black tracking-widest text-violet-200">
+                JAHNAVI
+              </span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Animation State Controls */}
-        <div className="flex items-center gap-2 mt-4">
-          <button
-            onClick={handleWaveClick}
-            type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
-              animMode === "waving"
-                ? "bg-violet-600 text-white font-bold shadow-md shadow-violet-600/40"
-                : "bg-slate-900/80 hover:bg-white/10 text-slate-300 border border-white/10"
-            }`}
-          >
-            <Smile className="w-3.5 h-3.5 text-sky-400" />
-            <span>Wave</span>
-          </button>
+      {/* Walking & Animation Toggles */}
+      <div className="mt-3 flex items-center justify-center gap-2">
+        <button
+          onClick={() => setIsWalkingUpDown(!isWalkingUpDown)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
+            isWalkingUpDown
+              ? "bg-violet-600/30 border border-violet-500/50 text-violet-200 font-bold"
+              : "bg-white/5 border border-white/10 text-slate-400"
+          }`}
+          title="Toggle up and down walking stroll"
+        >
+          <ArrowUpDown className="w-3.5 h-3.5 text-violet-400" />
+          <span>{isWalkingUpDown ? "Walking Up & Down: ON" : "Walking: PAUSED"}</span>
+        </button>
 
-          <button
-            onClick={() => setAnimMode("walking")}
-            type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
-              animMode === "walking"
-                ? "bg-violet-600 text-white font-bold shadow-md shadow-violet-600/40"
-                : "bg-slate-900/80 hover:bg-white/10 text-slate-300 border border-white/10"
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5 text-violet-400" />
-            <span>Walk</span>
-          </button>
-
-          <button
-            onClick={() => setAnimMode("explaining")}
-            type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
-              animMode === "explaining"
-                ? "bg-violet-600 text-white font-bold shadow-md shadow-violet-600/40"
-                : "bg-slate-900/80 hover:bg-white/10 text-slate-300 border border-white/10"
-            }`}
-          >
-            <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
-            <span>Explain</span>
-          </button>
-
-          <button
-            onClick={() => setAnimMode("idle")}
-            type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
-              animMode === "idle"
-                ? "bg-violet-600 text-white font-bold shadow-md shadow-violet-600/40"
-                : "bg-slate-900/80 hover:bg-white/10 text-slate-300 border border-white/10"
-            }`}
-          >
-            <Zap className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Idle</span>
-          </button>
-        </div>
+        <button
+          onClick={handleDollTap}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs font-mono transition-colors cursor-pointer"
+          title="Wave hello"
+        >
+          <Smile className="w-3.5 h-3.5 text-sky-400" />
+          <span>Wave</span>
+        </button>
       </div>
     </div>
   );

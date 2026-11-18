@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Sparkles, MessageSquare, ChevronUp, ChevronDown } from "lucide-react";
+import { X, Sparkles, MessageSquare, ChevronUp, ChevronDown, Radio } from "lucide-react";
 import { soundFX } from "./soundFx";
 
 interface ChapterComment {
@@ -122,11 +122,12 @@ export default function FloatingCompanion() {
       {/* Speech Bubble */}
       {!isMinimized && showBubble && (
         <div className="relative mb-2 max-w-[250px] sm:max-w-[290px] animate-in fade-in duration-200">
-          <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/95 backdrop-blur-xl border border-violet-500/35 text-xs text-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex items-start justify-between gap-2">
+          <div className="p-3 sm:p-3.5 rounded-2xl scifi-glass-panel border-cyan-400/40 text-xs text-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex items-start justify-between gap-2">
             <div className="space-y-1">
-              <span className="text-[10px] font-mono text-violet-400 font-bold uppercase tracking-wider block">
-                {currentBadge}
-              </span>
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-cyan-300 font-bold uppercase tracking-wider">
+                <Radio className="w-2.5 h-2.5 text-cyan-400 animate-pulse" />
+                <span>{currentBadge}</span>
+              </div>
               <p className="text-[11.5px] sm:text-xs text-slate-200 leading-snug">
                 {currentSpeech}
               </p>
@@ -134,7 +135,7 @@ export default function FloatingCompanion() {
 
             <button
               onClick={() => setShowBubble(false)}
-              className="text-slate-400 hover:text-violet-300 p-0.5 rounded cursor-pointer shrink-0"
+              className="text-slate-400 hover:text-cyan-300 p-0.5 rounded cursor-pointer shrink-0"
               aria-label="Dismiss speech bubble"
             >
               <X className="w-3.5 h-3.5" />
@@ -151,39 +152,39 @@ export default function FloatingCompanion() {
         {/* Toggle Minimize Button */}
         <button
           onClick={() => setIsMinimized(!isMinimized)}
-          className="p-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 text-slate-400 hover:text-white hover:border-violet-400/40 transition-colors shadow-xs cursor-pointer text-[10px] font-mono"
+          className="p-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-sky-500/30 text-slate-400 hover:text-cyan-300 hover:border-cyan-400 transition-colors shadow-xs cursor-pointer text-[10px] font-mono"
           title={isMinimized ? "Expand Companion" : "Minimize Companion"}
           aria-label={isMinimized ? "Expand Companion" : "Minimize Companion"}
         >
           {isMinimized ? (
-            <ChevronUp className="w-3.5 h-3.5 text-violet-400" />
+            <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
           ) : (
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           )}
         </button>
 
-        {/* Companion Avatar */}
+        {/* Mini Realistic 3D Robot that walks up & down */}
         <div
           onClick={handleTap}
-          className={`relative group cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 ${
+          className={`relative group cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 animate-walk-up-down ${
             isMinimized ? "opacity-75 hover:opacity-100" : ""
           }`}
-          title="Jahnavi's 3D companion guide. Click me!"
+          title="I'm Jahnavi's 3D companion robot! Tap me!"
         >
           {/* Subtle Glow halo */}
-          <div className="absolute inset-0 rounded-full bg-violet-500/25 blur-md animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-cyan-500/25 blur-lg animate-pulse pointer-events-none" />
 
-          {/* Avatar Container */}
-          <div className="relative w-14 h-16 sm:w-16 sm:h-20 flex flex-col items-center justify-center p-1 rounded-2xl bg-slate-950/90 border border-violet-500/40 shadow-xl overflow-hidden">
+          {/* Realistic Mini Cutout Image */}
+          <div className="relative w-20 h-28 flex flex-col items-center justify-center animate-robot-breathe">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/robot_realistic.png"
-              alt="Jahnavi's Companion"
-              className="w-full h-full object-contain drop-shadow-[0_4px_12px_rgba(139,92,246,0.6)] pointer-events-none animate-robot-breathe"
+              alt="Jahnavi's 3D Companion"
+              className="w-full h-full object-contain drop-shadow-[0_10px_25px_rgba(56,189,248,0.5)] pointer-events-none"
             />
 
-            {/* Mini Name Badge */}
-            <div className="absolute bottom-0.5 px-1.5 py-0.5 rounded-full bg-slate-950 border border-violet-400/80 text-[6.5px] font-mono font-black text-violet-200 tracking-wider">
+            {/* Mini JAHNAVI Name Badge */}
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-slate-950/95 border border-cyan-400/90 shadow-[0_0_10px_rgba(56,189,248,0.8)] text-[7px] font-mono font-black text-cyan-200 tracking-widest whitespace-nowrap">
               JAHNAVI
             </div>
           </div>

@@ -4,83 +4,90 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Volume2,
   VolumeX,
+  Play,
+  Pause,
   ChevronRight,
   ChevronLeft,
   Sparkles,
-  Heart,
   ArrowUpDown,
+  Smile,
+  Bot,
 } from "lucide-react";
+import { soundFX } from "./soundFx";
+import { ttsVoice } from "./ttsVoice";
 
-interface TourStep {
+export interface TourStep {
   title: string;
   speech: string;
   targetId?: string;
   badge: string;
+  shortLabel: string;
 }
 
-const tourSteps: TourStep[] = [
+export const tourSteps: TourStep[] = [
   {
-    title: "Hi, I'm Jahnavi's AI Robot! ✨",
+    title: "Hi, I'm Jahnavi's AI Companion! ✨",
     speech:
-      "Hello! I'm Jahnavi Murthy's realistic 3D companion robot! 🌟 Watch me walk up and down as I guide you through her journey as a Computer Science & Physics graduate, Gainwell Technologies Software Development Apprentice, and Full-Stack & Cloud engineer!",
-    targetId: "hero",
+      "Hello! I'm Jahnavi Murthy's 3D companion robot! 🌟 Watch me walk up and down as I guide you through her journey as a Computer Science & Physics graduate, Gainwell Technologies Software Development Apprentice, and Full-Stack & Cloud engineer!",
+    targetId: "introduction",
     badge: "01 / INTRO",
+    shortLabel: "Meet Jahnavi",
   },
   {
     title: "Bachelors & Academic Focus 💡",
     speech:
-      "Jahnavi is pursuing her Bachelors in Computer Science & Physics (2022–2026). She combines rigorous analytical computing foundations with practical full-stack software development!",
+      "Jahnavi is pursuing her Bachelors in Computer Science & Physics (2022–2026). She combines rigorous first-principles analytical reasoning and mathematical modeling from physics with scalable software architecture and algorithms from computer science!",
     targetId: "about",
     badge: "02 / EDUCATION",
+    shortLabel: "Education",
   },
   {
     title: "Gainwell Technologies Experience 💼",
     speech:
-      "Jahnavi completed her Software Development Apprenticeship at Gainwell Technologies, Bangalore (July 2025 – January 2026), writing clean code, collaborating in agile sprints, and contributing to enterprise engineering!",
-    targetId: "experience",
+      "Jahnavi completed her professional Software Development Apprenticeship at Gainwell Technologies, Bangalore (July 2025 – January 2026), writing clean maintainable code, participating in agile sprint cycles, and contributing to enterprise engineering deliverables!",
+    targetId: "journey",
     badge: "03 / EXPERIENCE",
+    shortLabel: "Gainwell Exp",
   },
   {
-    title: "17+ Technical Superpowers! ⚡",
+    title: "12 Programming Superpowers! ⚡",
     speech:
-      "From React, Next.js, and TypeScript on the frontend to Python, C#, and ASP.NET MVC on the backend, plus AWS and Terraform for automated infrastructure deployment!",
-    targetId: "about",
+      "Check out her 12 core programming skills with animated percentage bars: Java at 90%, Python at 75%, C# at 75%, HTML & CSS at 80%, JavaScript at 70%, Flask at 70%, Git & GitHub at 70%, SQL at 65%, C at 65%, React at 60%, Machine Learning at 60%, and Data Structures & Algorithms at 55%!",
+    targetId: "skills-section",
     badge: "04 / SKILLS",
+    shortLabel: "12 Skills",
   },
   {
-    title: "01: Appointment Booking System 📅",
+    title: "Flagship Work: AXIOM AI Agent 🤖",
     speech:
-      "Her Appointment Booking System web app is built with ASP.NET MVC, C#, Entity Framework, and SQL Server for fast, reliable scheduling and user management. Check it on her GitHub: Januuuu1creates!",
+      "Her flagship project is AXIOM AI Agent! An autonomous intelligent agent framework built with Python, LLM APIs, LangChain, and vector embeddings, featuring multi-step chain-of-thought task planning, tool execution, and semantic memory!",
     targetId: "projects",
-    badge: "05 / PROJECT",
+    badge: "05 / FLAGSHIP",
+    shortLabel: "AXIOM AI Agent",
   },
   {
-    title: "02: AI Resume Parser 📄",
+    title: "AI Resume Parser & Cloud Automation ☁️",
     speech:
-      "Her AI Resume Parser uses Python, Natural Language Processing (NLP), Scikit-learn, and Pandas to automatically extract resume data and evaluate candidate skills!",
+      "She also engineered the AI Resume Parser using Python, NLP, and Scikit-learn for automated candidate ranking, and Cloud Infrastructure Automation with AWS and Terraform for zero-drift cloud hosting!",
     targetId: "projects",
-    badge: "06 / PROJECT",
+    badge: "06 / PROJECTS",
+    shortLabel: "AI Parser & Cloud",
   },
   {
-    title: "03: Cloud Infrastructure Automation ☁️",
+    title: "AI Cooking Assistant 🍳",
     speech:
-      "Look at her AWS cloud automation! Jahnavi automated EC2 web servers, Apache hosting, S3 buckets, and IAM security permissions completely in Terraform code!",
+      "Her smart AI Cooking Assistant is powered by Python, Flask, and clean REST APIs to generate real-time culinary recipes dynamically based on pantry ingredients with zero food waste!",
     targetId: "projects",
-    badge: "07 / PROJECT",
-  },
-  {
-    title: "04: AI Cooking Assistant 🍳",
-    speech:
-      "Her smart AI Cooking Assistant recommends delicious recipes based on whatever ingredients you provide, powered by Python, Flask, and clean REST APIs!",
-    targetId: "projects",
-    badge: "08 / PROJECT",
+    badge: "07 / PROJECTS",
+    shortLabel: "Cooking Assistant",
   },
   {
     title: "Let's Connect & Build! 💌",
     speech:
-      "Jahnavi is actively looking for software engineering roles! Reach out directly via email (jahnavimurthy1111@gmail.com), LinkedIn, or explore her code on GitHub (github.com/Januuuu1creates)!",
+      "Enjoyed exploring? Jahnavi is actively seeking software engineering roles! Reach out directly via email at jahnavimurthy1111@gmail.com, LinkedIn, or explore her verified code on GitHub at github.com/Januuuu1creates!",
     targetId: "contact",
-    badge: "09 / CONNECT",
+    badge: "08 / CONNECT",
+    shortLabel: "Let's Connect",
   },
 ];
 
@@ -91,110 +98,116 @@ export default function DollCompanion() {
   const [headTilt, setHeadTilt] = useState({ x: 0, y: 0 });
   const [blinking, setBlinking] = useState(false);
   const [isWinking, setIsWinking] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(true);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [floatingParticles, setFloatingParticles] = useState<{ id: number; char: string; x: number; y: number }[]>([]);
 
+  // Voice narration states
+  const [isVoiceMuted, setIsVoiceMuted] = useState(false);
+  const [isVoicePlaying, setIsVoicePlaying] = useState(false);
+  const [isVoicePaused, setIsVoicePaused] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Realistic cute robot audio synthesizer
-  const playCuteSound = (freq = 680, duration = 0.08) => {
-    if (!soundEnabled) return;
-    try {
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+  // Subscribe to TTS Voice controller
+  useEffect(() => {
+    setIsVoiceMuted(ttsVoice.getMuted());
+    const unsubscribe = ttsVoice.subscribe(({ isSpeaking, isPaused }) => {
+      setIsVoicePlaying(isSpeaking && !isPaused);
+      setIsVoicePaused(isPaused);
+    });
+    return unsubscribe;
+  }, []);
 
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.45, ctx.currentTime + duration);
+  // Natural Blinking
+  useEffect(() => {
+    let blinkTimer: NodeJS.Timeout;
+    const scheduleNextBlink = () => {
+      const delay = 3200 + Math.random() * 2500;
+      blinkTimer = setTimeout(() => {
+        setBlinking(true);
+        setTimeout(() => {
+          setBlinking(false);
+          scheduleNextBlink();
+        }, 160);
+      }, delay);
+    };
 
-      gain.gain.setValueAtTime(0.04, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    scheduleNextBlink();
+    return () => clearTimeout(blinkTimer);
+  }, []);
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + duration);
-    } catch {
-      // Audio catch
-    }
-  };
-
-  // Cursor tracking for real-time 3D eye movement & perspective tilt
+  // Mouse Tracking for 3D Head Tilt & Eyes
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const robotCenterX = rect.left + rect.width / 2;
-      const robotCenterY = rect.top + rect.height * 0.45;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      const deltaX = e.clientX - robotCenterX;
-      const deltaY = e.clientY - robotCenterY;
+      const deltaX = (e.clientX - centerX) / (window.innerWidth / 2);
+      const deltaY = (e.clientY - centerY) / (window.innerHeight / 2);
 
-      const angle = Math.atan2(deltaY, deltaX);
-      const dist = Math.min(Math.hypot(deltaX, deltaY) / 22, 6.5);
+      const maxOffset = 5;
       setEyeOffset({
-        x: Math.cos(angle) * dist,
-        y: Math.sin(angle) * dist,
+        x: Math.max(-maxOffset, Math.min(maxOffset, deltaX * maxOffset)),
+        y: Math.max(-maxOffset, Math.min(maxOffset, deltaY * maxOffset)),
       });
 
-      const maxTilt = 7;
-      const tiltX = Math.max(-maxTilt, Math.min(maxTilt, -(deltaY / 42)));
-      const tiltY = Math.max(-maxTilt, Math.min(maxTilt, deltaX / 42));
-      setHeadTilt({ x: tiltX, y: tiltY });
+      setHeadTilt({
+        x: Math.max(-10, Math.min(10, -deltaY * 8)),
+        y: Math.max(-14, Math.min(14, deltaX * 12)),
+      });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Life-like natural blinking loop
-  useEffect(() => {
-    const blinkInterval = setInterval(() => {
-      if (Math.random() > 0.3) {
-        setBlinking(true);
-        setTimeout(() => setBlinking(false), 160);
+  const scrollToStep = (stepIdx: number, speakText = false) => {
+    const s = tourSteps[stepIdx];
+    if (!s) return;
+    setCurrentStep(stepIdx);
+
+    if (s.targetId) {
+      const el = document.getElementById(s.targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-    }, 3600);
-    return () => clearInterval(blinkInterval);
-  }, []);
+    }
+
+    if (speakText) {
+      ttsVoice.speak(
+        s.speech,
+        () => {
+          setIsVoicePlaying(true);
+          setIsVoicePaused(false);
+        },
+        () => {
+          setIsVoicePlaying(false);
+          setIsVoicePaused(false);
+        }
+      );
+    }
+  };
 
   const handleNextStep = () => {
-    playCuteSound(760);
-    const next = (currentStep + 1) % tourSteps.length;
-    setCurrentStep(next);
-
-    const target = tourSteps[next].targetId;
-    if (target) {
-      const el = document.getElementById(target);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
+    soundFX.playSparkle();
+    const nextIdx = (currentStep + 1) % tourSteps.length;
+    scrollToStep(nextIdx, isVoicePlaying);
   };
 
   const handlePrevStep = () => {
-    playCuteSound(540);
-    const prev = (currentStep - 1 + tourSteps.length) % tourSteps.length;
-    setCurrentStep(prev);
-
-    const target = tourSteps[prev].targetId;
-    if (target) {
-      const el = document.getElementById(target);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
+    soundFX.playSparkle();
+    const prevIdx = (currentStep - 1 + tourSteps.length) % tourSteps.length;
+    scrollToStep(prevIdx, isVoicePlaying);
   };
 
   const handleRobotTap = () => {
-    playCuteSound(840, 0.16);
+    soundFX.playChime();
     setIsWinking(true);
-    setTimeout(() => setIsWinking(false), 700);
+    setTimeout(() => setIsWinking(false), 900);
 
-    const emojis = ["✨", "💛", "🌟", "⭐", "🎉"];
+    const emojis = ["✨", "💜", "🌟", "💙", "⚡", "👋"];
     const particles = Array.from({ length: 4 }).map((_, i) => ({
       id: Date.now() + i,
       char: emojis[Math.floor(Math.random() * emojis.length)],
@@ -208,13 +221,28 @@ export default function DollCompanion() {
     }, 1400);
 
     const messages = [
-      "✨ 'Beep boop! Jahnavi's software robot at your service!'",
-      "💛 'Check her Gainwell Technologies experience & GitHub code!'",
-      "↕️ 'Walking up and down among the magical glowing lights!'",
-      "🌟 'Notice my warm golden glowing halo visor! Let's build together!'",
+      "✨ 'Beep boop! Jahnavi's 3D companion robot at your service!'",
+      "💜 'Notice me walking up and down among the magical lights!'",
+      "🤖 'Check her Gainwell Technologies experience & AXIOM AI Agent!'",
+      "🌟 'Click Walk & Explain Next to tour each chapter!'",
     ];
     setActionNotice(messages[Math.floor(Math.random() * messages.length)]);
-    setTimeout(() => setActionNotice(null), 3200);
+    setTimeout(() => setActionNotice(null), 3400);
+  };
+
+  const toggleVoicePlayPause = () => {
+    if (isVoicePlaying) {
+      ttsVoice.pause();
+    } else if (isVoicePaused) {
+      ttsVoice.resume();
+    } else {
+      scrollToStep(currentStep, true);
+    }
+  };
+
+  const toggleVoiceMute = () => {
+    const nextMuted = ttsVoice.toggleMute();
+    setIsVoiceMuted(nextMuted);
   };
 
   const step = tourSteps[currentStep];
@@ -224,71 +252,78 @@ export default function DollCompanion() {
       ref={containerRef}
       className="relative flex flex-col items-center justify-center max-w-xl mx-auto w-full select-none"
     >
-      {/* Sound & Companion Status Bar */}
-      <div className="flex items-center justify-between w-full px-2 mb-3 text-xs font-mono">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-amber-400/40 text-amber-200 shadow-md">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-          <span className="font-bold tracking-wider text-[11px] uppercase">
-            Jahnavi&apos;s 3D Companion &bull; [00]
-          </span>
-        </div>
-
-        <button
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 border border-amber-400/30 text-slate-300 hover:text-amber-300 hover:border-amber-400/60 transition-colors cursor-pointer shadow-xs"
-          title={soundEnabled ? "Mute Sound Effects" : "Enable Sound Effects"}
-        >
-          {soundEnabled ? (
-            <>
-              <Volume2 className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-[11px] font-bold">SFX ON</span>
-            </>
-          ) : (
-            <>
-              <VolumeX className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-[11px]">SFX OFF</span>
-            </>
-          )}
-        </button>
-      </div>
-
-      {/* SPEECH BALLOON EXPLAINING THE PORTFOLIO (Frosted Glassmorphism Card) */}
-      <div className="w-full bg-slate-950/80 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 sm:p-7 shadow-2xl shadow-black/60 relative z-20 mb-4 transition-all">
+      {/* Speech Balloon Console Explaining The Portfolio */}
+      <div className="w-full bg-slate-950/90 backdrop-blur-2xl border border-violet-500/40 rounded-3xl p-6 sm:p-7 shadow-[0_15px_45px_rgba(139,92,246,0.25)] relative z-30 mb-4 transition-all">
         {/* Step Header */}
         <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-amber-400/30">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-600/30 text-violet-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-violet-500/40">
               {step.badge}
             </span>
-            <span className="text-sm font-bold text-white tracking-tight">
-              {step.title}
+            <span className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
+              <Bot className="w-3.5 h-3.5 text-violet-400" />
+              <span>{step.title}</span>
             </span>
           </div>
 
-          <span className="text-xs font-mono font-bold text-amber-400">
-            {currentStep + 1} / {tourSteps.length}
-          </span>
+          <div className="flex items-center gap-2">
+            {/* Voice Controls */}
+            <button
+              onClick={toggleVoicePlayPause}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-violet-600/30 hover:bg-violet-600/50 border border-violet-500/40 text-violet-200 text-[11px] font-mono transition-all cursor-pointer"
+              title={isVoicePlaying ? "Pause voice narration" : "Play voice narration"}
+            >
+              {isVoicePlaying ? (
+                <>
+                  <Pause className="w-3 h-3 text-sky-400" />
+                  <span>Pause</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3 h-3 text-sky-400" />
+                  <span>Speak</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={toggleVoiceMute}
+              className="p-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              title={isVoiceMuted ? "Unmute voice" : "Mute voice"}
+              aria-label="Toggle voice sound"
+            >
+              {isVoiceMuted ? (
+                <VolumeX className="w-3.5 h-3.5 text-slate-500" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5 text-violet-400" />
+              )}
+            </button>
+
+            <span className="text-xs font-mono font-bold text-violet-400 ml-1">
+              {currentStep + 1} / {tourSteps.length}
+            </span>
+          </div>
         </div>
 
         {/* Narrative Speech Text */}
-        <p className="text-sm sm:text-base text-slate-200 font-normal leading-relaxed min-h-[60px]">
-          {step.speech}
+        <p className="text-sm sm:text-base text-slate-200 font-normal leading-relaxed min-h-[64px]">
+          &ldquo;{step.speech}&rdquo;
         </p>
 
         {/* Action Notice from Tap */}
         {actionNotice && (
-          <div className="mt-2 text-xs font-mono text-amber-200 bg-amber-950/50 p-2.5 rounded-xl border border-amber-400/40 animate-in fade-in flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="mt-2 text-xs font-mono text-violet-200 bg-violet-950/60 p-2.5 rounded-xl border border-violet-400/40 animate-in fade-in flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-sky-400 shrink-0" />
             <span>{actionNotice}</span>
           </div>
         )}
 
-        {/* Tour Navigation Controls */}
+        {/* Tour Navigation Controls & Step Pills */}
         <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-white/10">
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrevStep}
-              className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-violet-300 hover:bg-white/10 transition-colors cursor-pointer"
               title="Previous Step"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -296,7 +331,7 @@ export default function DollCompanion() {
 
             <button
               onClick={handleNextStep}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 text-slate-950 text-xs font-mono font-extrabold shadow-lg shadow-amber-500/30 hover:brightness-110 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-sky-600 text-white text-xs font-mono font-extrabold shadow-lg shadow-violet-600/30 hover:brightness-110 transition-all cursor-pointer"
             >
               <span>Walk &amp; Explain Next</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -304,46 +339,34 @@ export default function DollCompanion() {
           </div>
 
           {/* Quick jump pills */}
-          <div className="flex items-center gap-1.5 text-[10px] font-mono">
-            <button
-              onClick={() => setCurrentStep(1)}
-              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
-            >
-              About
-            </button>
-            <button
-              onClick={() => setCurrentStep(2)}
-              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
-            >
-              Exp
-            </button>
-            <button
-              onClick={() => setCurrentStep(4)}
-              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
-            >
-              Projects
-            </button>
-            <button
-              onClick={() => setCurrentStep(8)}
-              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
-            >
-              Contact
-            </button>
+          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
+            {tourSteps.map((s, idx) => (
+              <button
+                key={s.badge}
+                onClick={() => scrollToStep(idx, isVoicePlaying)}
+                className={`px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                  currentStep === idx
+                    ? "bg-violet-600 text-white font-bold border-violet-400 shadow-sm"
+                    : "bg-white/5 border-white/10 text-slate-300 hover:text-violet-300 hover:border-violet-500/40"
+                }`}
+              >
+                {s.shortLabel}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Speech Bubble Arrow */}
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[14px] border-t-slate-950/80" />
+        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[14px] border-t-slate-950/90" />
       </div>
 
-      {/* THE PHOTOREALISTIC 3D ROBOT
-          Isolated cutout directly on canvas (NO rectangular box!) that walks smoothly up and down */}
+      {/* THE PHOTOREALISTIC 3D DOLL THAT WALKS UP AND DOWN */}
       <div
         onClick={handleRobotTap}
         className={`relative w-76 h-96 sm:w-88 sm:h-[420px] cursor-pointer flex flex-col items-center justify-center select-none ${
           isWalkingUpDown ? "animate-walk-up-down" : ""
         }`}
-        title="Tap me! I'm Jahnavi Murthy's realistic 3D software robot!"
+        title="Tap me! I'm Jahnavi Murthy's realistic 3D software companion robot!"
       >
         {/* Floating Sparkle Particles */}
         {floatingParticles.map((p) => (
@@ -353,17 +376,18 @@ export default function DollCompanion() {
             style={{
               left: `calc(50% + ${p.x}px)`,
               top: `calc(35% + ${p.y}px)`,
+              filter: "drop-shadow(0 0 8px rgba(139, 92, 246, 0.8))",
             }}
           >
             {p.char}
           </div>
         ))}
 
-        {/* Dynamic Warm Ground Contact Light & Shadow */}
-        <div className="absolute bottom-4 w-64 sm:w-72 h-14 rounded-full bg-amber-500/25 blur-xl -z-10 animate-pulse pointer-events-none" />
+        {/* Dynamic Ambient Glow & Shadow */}
+        <div className="absolute bottom-4 w-64 sm:w-72 h-14 rounded-full bg-violet-600/25 blur-xl -z-10 animate-pulse pointer-events-none" />
         <div className="absolute bottom-2 w-48 sm:w-56 h-8 rounded-full bg-black/70 blur-md -z-10 pointer-events-none" />
 
-        {/* 3D Realistic Robot Model Container with 3D Head Tilt */}
+        {/* 3D Model Container with 3D Head Tilt & Natural Breathing */}
         <div
           style={{
             transform: `rotateX(${headTilt.x}deg) rotateY(${headTilt.y}deg)`,
@@ -372,19 +396,19 @@ export default function DollCompanion() {
           }}
           className="relative w-full h-full flex flex-col items-center justify-center animate-robot-breathe [perspective:1000px]"
         >
-          {/* THE REALISTIC 3D CUTOUT IMAGE (NO BOXED BACKGROUND!) */}
+          {/* THE PHOTOREALISTIC CUTOUT IMAGE (NO BOXED BACKGROUND!) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/robot_realistic.png"
-            alt="Jahnavi's Realistic 3D Robot"
-            className="w-auto h-full max-h-[380px] sm:max-h-[420px] object-contain drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)] pointer-events-none transition-transform duration-300 group-hover:scale-105"
+            alt="Jahnavi's Realistic 3D Robot Doll"
+            className="w-auto h-full max-h-[380px] sm:max-h-[420px] object-contain drop-shadow-[0_20px_45px_rgba(139,92,246,0.6)] pointer-events-none transition-transform duration-300 group-hover:scale-105"
           />
 
-          {/* INTERACTIVE MOVING EYE OVERLAYS (Tracking mouse cursor over the 3D model) */}
+          {/* EYE SPECULAR HIGHLIGHT OVERLAYS (Tracking mouse cursor over 3D model) */}
           <div className="absolute top-[38%] left-[46%] w-10 h-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             {!blinking && (
               <div
-                className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] opacity-95 transition-transform duration-75 ease-out"
+                className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)] opacity-95 transition-transform duration-75 ease-out"
                 style={{
                   transform: `translate(${eyeOffset.x * 0.7}px, ${eyeOffset.y * 0.7}px)`,
                 }}
@@ -392,10 +416,10 @@ export default function DollCompanion() {
             )}
           </div>
 
-          <div className="absolute top-[40%] left-[84%] w-8 h-8 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          <div className="absolute top-[40%] left-[64%] w-8 h-8 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             {!blinking && !isWinking && (
               <div
-                className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] opacity-95 transition-transform duration-75 ease-out"
+                className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)] opacity-95 transition-transform duration-75 ease-out"
                 style={{
                   transform: `translate(${eyeOffset.x * 0.6}px, ${eyeOffset.y * 0.6}px)`,
                 }}
@@ -405,9 +429,9 @@ export default function DollCompanion() {
 
           {/* ILLUMINATED 3D NAME BADGE EMBOSSED ON CHEST: JAHNAVI */}
           <div className="absolute top-[68%] left-[54%] -translate-x-1/2 pointer-events-none z-30">
-            <div className="px-3 py-0.8 rounded-full bg-slate-950/90 backdrop-blur-md border border-amber-400/90 shadow-[0_0_15px_rgba(245,158,11,0.6)] flex items-center gap-1.5 animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400" />
-              <span className="text-[9.5px] sm:text-[10.5px] font-mono font-black tracking-widest text-amber-200 drop-shadow">
+            <div className="px-3.5 py-1 rounded-full bg-slate-950/90 backdrop-blur-md border border-violet-400/80 shadow-[0_0_15px_rgba(139,92,246,0.8)] flex items-center gap-1.5 animate-pulse">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 shadow-sm shadow-violet-400" />
+              <span className="text-[9.5px] sm:text-[10.5px] font-mono font-black tracking-widest text-violet-200 drop-shadow">
                 JAHNAVI
               </span>
             </div>
@@ -417,39 +441,26 @@ export default function DollCompanion() {
 
       {/* Walking Controls & Motion Toggles */}
       <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-        {/* Toggle Up and Down Walking */}
         <button
-          onClick={() => {
-            setIsWalkingUpDown(!isWalkingUpDown);
-            playCuteSound(isWalkingUpDown ? 480 : 720);
-          }}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 shadow-md ${
+          onClick={() => setIsWalkingUpDown(!isWalkingUpDown)}
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
             isWalkingUpDown
-              ? "bg-amber-500 text-slate-950 font-extrabold shadow-amber-500/30"
-              : "bg-slate-900/90 text-slate-200 border border-white/10 hover:border-amber-400/50"
+              ? "bg-violet-600/30 border border-violet-500/50 text-violet-200 font-bold"
+              : "bg-white/5 border border-white/10 text-slate-400"
           }`}
-          title={isWalkingUpDown ? "Pause walking up & down" : "Start walking up & down"}
+          title="Toggle up and down walking stroll"
         >
-          <ArrowUpDown className="w-3.5 h-3.5" />
-          <span>{isWalkingUpDown ? "Walking Up & Down" : "Resume Walk"}</span>
+          <ArrowUpDown className="w-3.5 h-3.5 text-violet-400" />
+          <span>{isWalkingUpDown ? "Walking Up & Down: ON" : "Walking: PAUSED"}</span>
         </button>
 
-        {/* Tap Me Reaction */}
         <button
           onClick={handleRobotTap}
-          className="px-3.5 py-1.5 rounded-xl text-xs font-mono bg-amber-400/20 text-amber-200 border border-amber-400/40 hover:bg-amber-400/30 transition-all cursor-pointer font-bold flex items-center gap-1.5 shadow-xs"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs font-mono transition-colors cursor-pointer"
+          title="Wave hello"
         >
-          <Heart className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-          <span>Tap Me!</span>
-        </button>
-
-        {/* Next Project Tour Trigger */}
-        <button
-          onClick={handleNextStep}
-          className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-900/90 text-slate-200 border border-white/10 hover:border-amber-400/50 hover:text-amber-300 transition-all cursor-pointer flex items-center gap-1"
-        >
-          <span>Next Stop</span>
-          <ChevronRight className="w-3 h-3 text-amber-400" />
+          <Smile className="w-3.5 h-3.5 text-sky-400" />
+          <span>Tap Companion</span>
         </button>
       </div>
     </div>

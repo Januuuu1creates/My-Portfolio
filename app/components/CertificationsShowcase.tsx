@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Award, CheckCircle2, ShieldCheck, ArrowUpRight, Sparkles, BookOpen } from "lucide-react";
+import { Award, CheckCircle2, ShieldCheck, Sparkles, Shield, Heart } from "lucide-react";
 
 interface CertificationItem {
   id: string;
@@ -48,26 +48,25 @@ export default function CertificationsShowcase() {
   return (
     <section
       id="certifications"
-      className="py-28 relative border-b border-white/10 scroll-mt-16 overflow-hidden"
+      className="py-16 sm:py-20 relative border-b border-pink-500/15 scroll-mt-16 overflow-hidden"
     >
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-violet-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-violet-glow" />
-      <div className="absolute bottom-10 right-0 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-blue-glow" />
+      <div className="absolute top-1/2 left-0 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-lilac-glow" />
+      <div className="absolute bottom-10 right-0 w-80 h-80 bg-pink-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-rose-glow" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Chapter Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-16 border-b border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-14 border-b border-pink-500/15">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-violet-400 uppercase tracking-widest mb-2 font-bold">
-              <span>[06]</span>
-              <span>&mdash;</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/10 border border-pink-400/25 text-xs font-mono text-pink-300 uppercase tracking-widest mb-3 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-pink-400" />
               <span>CHAPTER 06 &bull; CERTIFICATIONS</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Technical Credentials
             </h2>
           </div>
-          <p className="text-xs sm:text-sm font-mono text-slate-400 mt-4 md:mt-0 max-w-sm">
+          <p className="text-xs sm:text-sm font-sans text-slate-300 mt-4 md:mt-0 max-w-sm leading-relaxed">
             Continuous technical growth validating core proficiencies in cloud automation, AI systems, and full-stack engineering.
           </p>
         </div>
@@ -80,38 +79,31 @@ export default function CertificationsShowcase() {
               <div
                 key={cert.id}
                 onClick={() => setActiveCert(cert.id)}
-                className={`group relative flex flex-col justify-between p-7 sm:p-8 rounded-3xl border transition-all duration-300 cursor-pointer ${
+                className={`group relative flex flex-col justify-between p-7 sm:p-8 rounded-3xl transition-all duration-300 cursor-pointer scifi-glass-panel ${
                   isSelected
-                    ? "bg-slate-900/90 border-violet-500/60 shadow-[0_10px_35px_rgba(139,92,246,0.25)] -translate-y-1"
-                    : "bg-slate-900/40 border-white/10 hover:border-violet-500/40 hover:bg-slate-900/70"
+                    ? "bg-white/[0.08] border-pink-400 shadow-[0_0_30px_rgba(244,114,182,0.25)] -translate-y-1"
+                    : "border-pink-400/20 hover:border-pink-400/40 hover:bg-white/[0.04]"
                 }`}
               >
                 <div>
                   {/* Top Bar */}
                   <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
-                    <span className="text-xs font-mono text-violet-400 font-bold uppercase tracking-wider">
+                    <span className="text-xs font-mono text-pink-300 font-bold uppercase tracking-wider">
                       [0{index + 1}] &bull; {cert.domain}
                     </span>
-                    <div className="flex items-center gap-1 text-[11px] font-mono text-emerald-400 font-semibold">
-                      <ShieldCheck className="w-3.5 h-3.5" />
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-pink-300 font-semibold px-2.5 py-0.5 rounded-full bg-pink-500/10 border border-pink-400/30">
+                      <ShieldCheck className="w-3.5 h-3.5 text-pink-400" />
                       <span>VERIFIED</span>
                     </div>
                   </div>
 
-                  {/* Icon & Title */}
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="p-2.5 rounded-xl bg-violet-600/20 text-violet-300 border border-violet-500/30 shrink-0">
-                      <Award className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-violet-300 transition-colors">
-                        {cert.title}
-                      </h3>
-                      <p className="text-xs font-mono text-slate-400 mt-0.5">
-                        {cert.issuer}
-                      </p>
-                    </div>
-                  </div>
+                  {/* Title & Issuer */}
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-pink-300 transition-colors">
+                    {cert.title}
+                  </h3>
+                  <p className="text-xs font-mono text-purple-300 font-medium mb-4">
+                    {cert.issuer}
+                  </p>
 
                   {/* Description */}
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans mb-6">
@@ -119,13 +111,13 @@ export default function CertificationsShowcase() {
                   </p>
                 </div>
 
-                {/* Skills Tags */}
-                <div>
-                  <div className="pt-4 border-t border-white/10 flex flex-wrap gap-1.5">
+                {/* Skills Chips */}
+                <div className="pt-4 border-t border-white/10">
+                  <div className="flex flex-wrap gap-1.5">
                     {cert.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-sky-300 font-medium"
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-xl bg-purple-950/40 border border-purple-400/30 text-purple-200"
                       >
                         {skill}
                       </span>

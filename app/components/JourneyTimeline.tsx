@@ -8,8 +8,8 @@ import {
   MapPin,
   CheckCircle,
   Sparkles,
-  ArrowRight,
-  ChevronDown,
+  Heart,
+  ChevronRight,
 } from "lucide-react";
 
 interface Milestone {
@@ -69,71 +69,76 @@ export default function JourneyTimeline() {
   return (
     <section
       id="journey"
-      className="py-28 relative border-b border-white/10 scroll-mt-16 overflow-hidden"
+      className="py-16 sm:py-20 relative border-b border-pink-500/15 scroll-mt-16 overflow-hidden"
     >
-      {/* Background Ambient Glows */}
-      <div className="absolute top-1/2 right-10 w-96 h-96 bg-violet-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-violet-glow" />
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-blue-glow" />
+      {/* Background Soft Glows */}
+      <div className="absolute top-1/2 right-8 w-80 h-80 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-lilac-glow" />
+      <div className="absolute bottom-10 left-8 w-80 h-80 bg-pink-500/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-rose-glow" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Chapter Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-16 border-b border-white/10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between pb-8 mb-14 border-b border-pink-500/15">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-violet-400 uppercase tracking-widest mb-2 font-bold">
-              <span>[03]</span>
-              <span>&mdash;</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/10 border border-pink-400/25 text-xs font-mono text-pink-300 uppercase tracking-widest mb-3 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-pink-400" />
               <span>CHAPTER 03 &bull; MY JOURNEY</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Milestones &amp; Experience
             </h2>
           </div>
-          <p className="text-xs sm:text-sm font-mono text-slate-400 mt-4 md:mt-0 max-w-sm">
+          <p className="text-xs sm:text-sm font-sans text-slate-300 mt-4 lg:mt-0 max-w-sm leading-relaxed">
             An interactive timeline of my professional apprenticeship at Gainwell Technologies and academic foundations in CS &amp; Physics.
           </p>
         </div>
 
         {/* Interactive Timeline Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Timeline Navigation Cards */}
+          {/* Left Column: Timeline Navigation Cards with Pastel Conduit */}
           <div className="lg:col-span-5 space-y-4">
-            <p className="text-xs font-mono uppercase tracking-widest text-slate-400 font-bold mb-2">
-              SELECT A MILESTONE TO INSPECT
-            </p>
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-pink-300/80 font-bold mb-2">
+              <span>SELECT A MILESTONE</span>
+              <span className="text-[10px] text-purple-300 flex items-center gap-1 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+                INTERACTIVE
+              </span>
+            </div>
 
-            <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-4 before:bottom-4 before:w-0.5 before:bg-gradient-to-b before:from-violet-500 before:via-sky-400 before:to-indigo-500">
-              {milestones.map((item, index) => {
+            <div className="relative pl-7 space-y-5 before:absolute before:left-2.5 before:top-4 before:bottom-4 before:w-[2px] before:bg-gradient-to-b before:from-pink-400 before:via-purple-400 before:to-pink-300 before:shadow-[0_0_10px_rgba(244,114,182,0.5)]">
+              {milestones.map((item) => {
                 const isSelected = selectedMilestone === item.id;
                 return (
                   <div
                     key={item.id}
                     onClick={() => setSelectedMilestone(item.id)}
-                    className={`relative p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                    className={`relative p-6 rounded-3xl transition-all duration-300 cursor-pointer scifi-glass-panel ${
                       isSelected
-                        ? "bg-slate-900/90 border-violet-500/60 shadow-[0_10px_35px_rgba(139,92,246,0.25)] -translate-y-1"
-                        : "bg-slate-900/40 border-white/10 hover:border-white/20 hover:bg-slate-900/60"
+                        ? "border-pink-400 bg-white/[0.06] shadow-[0_0_30px_rgba(244,114,182,0.25)] -translate-y-1"
+                        : "border-pink-400/20 hover:border-pink-400/40 hover:bg-white/[0.04]"
                     }`}
                   >
-                    {/* Node Indicator on the timeline line */}
+                    {/* Glowing Pastel Node on the timeline */}
                     <div
-                      className={`absolute -left-7 top-7 w-3.5 h-3.5 rounded-full border-2 transition-all ${
+                      className={`absolute -left-[27px] top-7 w-4 h-4 rounded-full border-2 transition-all flex items-center justify-center ${
                         isSelected
-                          ? "bg-violet-400 border-white ring-4 ring-violet-500/30 scale-125"
-                          : "bg-slate-900 border-slate-500"
+                          ? "bg-pink-400 border-white ring-4 ring-pink-500/40 scale-125 shadow-[0_0_12px_#f472b6]"
+                          : "bg-[#12091d] border-slate-600 hover:border-pink-400"
                       }`}
-                    />
-
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className="text-[11px] font-mono text-sky-400 font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-400/20">
-                        {item.badge}
-                      </span>
-                      <span className="text-xs font-mono text-slate-400">{item.period}</span>
+                    >
+                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
 
-                    <h3 className="text-lg font-bold text-white mb-1">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-[11px] font-mono text-pink-300 font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-pink-500/10 border border-pink-400/30">
+                        {item.badge}
+                      </span>
+                      <span className="text-xs font-mono text-purple-200/80">{item.period}</span>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-pink-300 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs font-mono text-violet-300 font-medium">
+                    <p className="text-xs font-mono text-purple-300 font-medium">
                       {item.organization} &bull; {item.location}
                     </p>
 
@@ -146,51 +151,56 @@ export default function JourneyTimeline() {
             </div>
           </div>
 
-          {/* Right Column: Detailed Interactive Milestone Inspector */}
+          {/* Right Column: Detailed Inspector Card */}
           <div className="lg:col-span-7">
             {milestones.map((item) => {
               if (item.id !== selectedMilestone) return null;
               return (
                 <div
                   key={item.id}
-                  className="p-8 sm:p-10 rounded-3xl bg-slate-900/70 backdrop-blur-xl border border-violet-500/30 shadow-2xl space-y-6 animate-in fade-in duration-300"
+                  className="p-7 sm:p-9 rounded-3xl scifi-glass-panel border-pink-400/30 shadow-2xl space-y-6 relative overflow-hidden animate-in fade-in duration-300"
                 >
                   {/* Inspector Header */}
                   <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/10">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         {item.type === "experience" ? (
-                          <Briefcase className="w-5 h-5 text-violet-400" />
+                          <div className="p-2 rounded-2xl bg-pink-500/20 border border-pink-400/30 text-pink-300">
+                            <Briefcase className="w-4 h-4 text-pink-300" />
+                          </div>
                         ) : (
-                          <GraduationCap className="w-5 h-5 text-sky-400" />
+                          <div className="p-2 rounded-2xl bg-purple-500/20 border border-purple-400/30 text-purple-300">
+                            <GraduationCap className="w-4 h-4 text-purple-300" />
+                          </div>
                         )}
-                        <span className="text-xs font-mono uppercase tracking-wider text-sky-400 font-bold">
+                        <span className="text-xs font-mono uppercase tracking-wider text-pink-300 font-bold">
                           {item.badge}
                         </span>
                       </div>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
                         {item.title}
                       </h3>
-                      <p className="text-sm font-mono text-violet-300 font-semibold mt-1">
+                      <p className="text-sm font-mono text-purple-300 font-semibold mt-1">
                         {item.organization}
                       </p>
                     </div>
 
                     <div className="text-right">
                       <div className="flex items-center gap-1.5 text-xs font-mono text-slate-300 justify-end">
-                        <Calendar className="w-3.5 h-3.5 text-violet-400" />
+                        <Calendar className="w-3.5 h-3.5 text-pink-400" />
                         <span>{item.period}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400 justify-end mt-1">
-                        <MapPin className="w-3.5 h-3.5 text-sky-400" />
+                      <div className="flex items-center gap-1.5 text-xs font-mono text-purple-300 justify-end mt-1">
+                        <MapPin className="w-3.5 h-3.5 text-purple-400" />
                         <span>{item.location}</span>
                       </div>
                     </div>
+
                   </div>
 
                   {/* Summary Narrative */}
                   <div>
-                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-2">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-pink-300/90 font-bold mb-2">
                       ROLE OVERVIEW
                     </h4>
                     <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-sans">
@@ -200,18 +210,18 @@ export default function JourneyTimeline() {
 
                   {/* Key Responsibilities & Contributions */}
                   <div>
-                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
-                      <Sparkles className="w-3.5 h-3.5 text-violet-400" />
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-pink-300/90 font-bold mb-3 flex items-center gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-pink-300" />
                       <span>KEY CONTRIBUTIONS &amp; LEARNINGS</span>
                     </h4>
                     <div className="space-y-2.5">
                       {item.highlights.map((highlight, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5"
+                          className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-pink-400/30 transition-colors"
                         >
-                          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                          <span className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                          <CheckCircle className="w-4 h-4 text-pink-400 shrink-0 mt-0.5" />
+                          <span className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
                             {highlight}
                           </span>
                         </div>
@@ -221,14 +231,14 @@ export default function JourneyTimeline() {
 
                   {/* Skills Acquired & Utilized */}
                   <div className="pt-4 border-t border-white/10">
-                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-3">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-pink-300/90 font-bold mb-3">
                       APPLIED TECHNICAL SKILLS
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {item.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="text-xs font-mono px-3 py-1.5 rounded-xl bg-violet-600/20 border border-violet-500/40 text-violet-200 font-medium"
+                          className="text-xs font-mono px-3 py-1.5 rounded-xl bg-purple-950/40 border border-purple-400/30 text-purple-200 font-medium hover:border-pink-400 transition-colors"
                         >
                           {skill}
                         </span>
