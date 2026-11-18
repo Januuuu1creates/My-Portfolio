@@ -1,0 +1,30 @@
+{
+  "name": "jahnavi-murthy-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:css": "node -e \"const postcss=require('postcss');const tailwind=require('@tailwindcss/postcss');const fs=require('fs');const css=fs.readFileSync('app/globals.src.css','utf8');postcss([tailwind()]).process(css,{from:'app/globals.src.css'}).then(r=>fs.writeFileSync('app/globals.css',r.css));\"",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/three": "^0.187.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.28.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tailwind-merge": "^3.6.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
