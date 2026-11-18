@@ -1,8 +1,7 @@
+
 # V Jahnavi Murthy - Personal Portfolio Website
 
 A modern, elegant, professional, and fully responsive personal portfolio website built with **Next.js (App Router)**, **TypeScript**, and **Tailwind CSS**.
-
----
 
 ## 🌟 Overview & Features
 
@@ -70,3 +69,7 @@ npm run build
 npm run start
 ```
 The production build compiles statically for optimal speed and SEO performance.
+=======
+# My-Portfolio
+💻 Developer | 🚀 Tech Enthusiast | 🌱 Lifelong Learner | Building projects, exploring technologies, and turning ideas into reality.
+>>>>>>> 902639be28a004fca6f69da4444c71cf1e1f7b75
