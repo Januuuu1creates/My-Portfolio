@@ -24,7 +24,7 @@ export default function ThreeCanvas() {
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
     // Transparent depth with zero dimming fog so background artwork remains bright & crisp
-    scene.fog = undefined;
+    scene.fog = null;
 
     const camera = new THREE.PerspectiveCamera(
       55,
