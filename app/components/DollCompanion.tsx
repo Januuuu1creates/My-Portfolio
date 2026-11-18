@@ -9,10 +9,6 @@ import {
   Sparkles,
   Heart,
   ArrowUpDown,
-  Footprints,
-  Pause,
-  Play,
-  RotateCcw,
 } from "lucide-react";
 
 interface TourStep {
@@ -24,67 +20,73 @@ interface TourStep {
 
 const tourSteps: TourStep[] = [
   {
-    title: "Hi, I'm Jahnavi's Bubbly Robot! ✨",
+    title: "Hi, I'm Jahnavi's AI Robot! ✨",
     speech:
-      "Hello! I'm Jahnavi Murthy's cute bubbly companion robot! 🌟 Watch me walk up and down as I guide you through her portfolio as an Aspiring Software Engineer, Full-Stack Developer, and Cloud & AI enthusiast! Check out my chest badge: JAHNAVI!",
+      "Hello! I'm Jahnavi Murthy's realistic 3D companion robot! 🌟 Watch me walk up and down as I guide you through her journey as a Computer Science & Physics graduate, Gainwell Technologies Software Development Apprentice, and Full-Stack & Cloud engineer!",
     targetId: "hero",
     badge: "01 / INTRO",
   },
   {
-    title: "About Jahnavi's Mission 💡",
+    title: "Bachelors & Academic Focus 💡",
     speech:
-      "Jahnavi is a Computer Science student dedicated to building innovative applications and solving real-world challenges. She loves clean code, cloud architecture, and modern engineering!",
+      "Jahnavi is pursuing her Bachelors in Computer Science & Physics (2022–2026). She combines rigorous analytical computing foundations with practical full-stack software development!",
     targetId: "about",
-    badge: "02 / ABOUT",
+    badge: "02 / EDUCATION",
+  },
+  {
+    title: "Gainwell Technologies Experience 💼",
+    speech:
+      "Jahnavi completed her Software Development Apprenticeship at Gainwell Technologies, Bangalore (July 2025 – January 2026), writing clean code, collaborating in agile sprints, and contributing to enterprise engineering!",
+    targetId: "experience",
+    badge: "03 / EXPERIENCE",
   },
   {
     title: "17+ Technical Superpowers! ⚡",
     speech:
       "From React, Next.js, and TypeScript on the frontend to Python, C#, and ASP.NET MVC on the backend, plus AWS and Terraform for automated infrastructure deployment!",
     targetId: "about",
-    badge: "03 / SKILLS",
+    badge: "04 / SKILLS",
   },
   {
     title: "01: Appointment Booking System 📅",
     speech:
-      "Her Appointment Booking System web app is built with ASP.NET MVC, C#, Entity Framework, and SQL Server for fast, reliable scheduling and user management.",
+      "Her Appointment Booking System web app is built with ASP.NET MVC, C#, Entity Framework, and SQL Server for fast, reliable scheduling and user management. Check it on her GitHub: Januuuu1creates!",
     targetId: "projects",
-    badge: "04 / PROJECT",
+    badge: "05 / PROJECT",
   },
   {
     title: "02: AI Resume Parser 📄",
     speech:
       "Her AI Resume Parser uses Python, Natural Language Processing (NLP), Scikit-learn, and Pandas to automatically extract resume data and evaluate candidate skills!",
     targetId: "projects",
-    badge: "05 / PROJECT",
+    badge: "06 / PROJECT",
   },
   {
     title: "03: Cloud Infrastructure Automation ☁️",
     speech:
       "Look at her AWS cloud automation! Jahnavi automated EC2 web servers, Apache hosting, S3 buckets, and IAM security permissions completely in Terraform code!",
     targetId: "projects",
-    badge: "06 / PROJECT",
+    badge: "07 / PROJECT",
   },
   {
     title: "04: AI Cooking Assistant 🍳",
     speech:
       "Her smart AI Cooking Assistant recommends delicious recipes based on whatever ingredients you provide, powered by Python, Flask, and clean REST APIs!",
     targetId: "projects",
-    badge: "07 / PROJECT",
+    badge: "08 / PROJECT",
   },
   {
     title: "Let's Connect & Build! 💌",
     speech:
-      "Jahnavi is actively looking for software engineering roles and internships! Reach out via email (jahnavimurthy878@gmail.com) or LinkedIn. We'd love to collaborate!",
+      "Jahnavi is actively looking for software engineering roles! Reach out directly via email (jahnavimurthy1111@gmail.com), LinkedIn, or explore her code on GitHub (github.com/Januuuu1creates)!",
     targetId: "contact",
-    badge: "08 / CONNECT",
+    badge: "09 / CONNECT",
   },
 ];
 
 export default function DollCompanion() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isWalkingUpDown, setIsWalkingUpDown] = useState(true);
-  const [verticalOffset, setVerticalOffset] = useState(0);
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
   const [headTilt, setHeadTilt] = useState({ x: 0, y: 0 });
   const [blinking, setBlinking] = useState(false);
@@ -95,7 +97,7 @@ export default function DollCompanion() {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Cute bubbly audio chime
+  // Realistic cute robot audio synthesizer
   const playCuteSound = (freq = 680, duration = 0.08) => {
     if (!soundEnabled) return;
     try {
@@ -124,7 +126,7 @@ export default function DollCompanion() {
     }
   };
 
-  // Cursor tracking for real-time bubbly eye movement & 3D head tilt
+  // Cursor tracking for real-time 3D eye movement & perspective tilt
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
@@ -136,7 +138,7 @@ export default function DollCompanion() {
       const deltaY = e.clientY - robotCenterY;
 
       const angle = Math.atan2(deltaY, deltaX);
-      const dist = Math.min(Math.hypot(deltaX, deltaY) / 20, 7);
+      const dist = Math.min(Math.hypot(deltaX, deltaY) / 22, 6.5);
       setEyeOffset({
         x: Math.cos(angle) * dist,
         y: Math.sin(angle) * dist,
@@ -152,14 +154,14 @@ export default function DollCompanion() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Life-like blinking
+  // Life-like natural blinking loop
   useEffect(() => {
     const blinkInterval = setInterval(() => {
       if (Math.random() > 0.3) {
         setBlinking(true);
         setTimeout(() => setBlinking(false), 160);
       }
-    }, 3500);
+    }, 3600);
     return () => clearInterval(blinkInterval);
   }, []);
 
@@ -192,7 +194,7 @@ export default function DollCompanion() {
     setIsWinking(true);
     setTimeout(() => setIsWinking(false), 700);
 
-    const emojis = ["✨", "💛", "🫧", "🌟", "⭐", "🎉"];
+    const emojis = ["✨", "💛", "🌟", "⭐", "🎉"];
     const particles = Array.from({ length: 4 }).map((_, i) => ({
       id: Date.now() + i,
       char: emojis[Math.floor(Math.random() * emojis.length)],
@@ -206,9 +208,9 @@ export default function DollCompanion() {
     }, 1400);
 
     const messages = [
-      "🫧 'Beep boop! I'm Jahnavi's bubbly software robot!'",
-      "💛 'Look at my chest badge: JAHNAVI!'",
-      "↕️ 'Walking up and down to explain her projects!'",
+      "✨ 'Beep boop! Jahnavi's software robot at your service!'",
+      "💛 'Check her Gainwell Technologies experience & GitHub code!'",
+      "↕️ 'Walking up and down among the magical glowing lights!'",
       "🌟 'Notice my warm golden glowing halo visor! Let's build together!'",
     ];
     setActionNotice(messages[Math.floor(Math.random() * messages.length)]);
@@ -224,21 +226,21 @@ export default function DollCompanion() {
     >
       {/* Sound & Companion Status Bar */}
       <div className="flex items-center justify-between w-full px-2 mb-3 text-xs font-mono">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-amber-200/80 text-amber-900 shadow-xs">
-          <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-amber-400/40 text-amber-200 shadow-md">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
           <span className="font-bold tracking-wider text-[11px] uppercase">
-            Jahnavi&apos;s Bubbly Companion &bull; [00]
+            Jahnavi&apos;s 3D Companion &bull; [00]
           </span>
         </div>
 
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 border border-amber-200/80 text-slate-700 hover:text-amber-700 hover:border-amber-300 transition-colors cursor-pointer shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 border border-amber-400/30 text-slate-300 hover:text-amber-300 hover:border-amber-400/60 transition-colors cursor-pointer shadow-xs"
           title={soundEnabled ? "Mute Sound Effects" : "Enable Sound Effects"}
         >
           {soundEnabled ? (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-amber-600" />
+              <Volume2 className="w-3.5 h-3.5 text-amber-400" />
               <span className="text-[11px] font-bold">SFX ON</span>
             </>
           ) : (
@@ -250,43 +252,43 @@ export default function DollCompanion() {
         </button>
       </div>
 
-      {/* SPEECH BALLOON EXPLAINING THE PORTFOLIO (Swiss Minimalist Card) */}
-      <div className="w-full bg-white/95 backdrop-blur-md border-2 border-amber-200/90 rounded-3xl p-6 sm:p-7 shadow-xl shadow-amber-900/5 relative z-20 mb-4 transition-all">
+      {/* SPEECH BALLOON EXPLAINING THE PORTFOLIO (Frosted Glassmorphism Card) */}
+      <div className="w-full bg-slate-950/80 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 sm:p-7 shadow-2xl shadow-black/60 relative z-20 mb-4 transition-all">
         {/* Step Header */}
-        <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-amber-100">
+        <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-mono font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-amber-400/30">
               {step.badge}
             </span>
-            <span className="text-sm font-bold text-slate-900 tracking-tight">
+            <span className="text-sm font-bold text-white tracking-tight">
               {step.title}
             </span>
           </div>
 
-          <span className="text-xs font-mono font-bold text-amber-700">
+          <span className="text-xs font-mono font-bold text-amber-400">
             {currentStep + 1} / {tourSteps.length}
           </span>
         </div>
 
         {/* Narrative Speech Text */}
-        <p className="text-sm sm:text-base text-slate-700 font-normal leading-relaxed min-h-[60px]">
+        <p className="text-sm sm:text-base text-slate-200 font-normal leading-relaxed min-h-[60px]">
           {step.speech}
         </p>
 
         {/* Action Notice from Tap */}
         {actionNotice && (
-          <div className="mt-2 text-xs font-mono text-amber-950 bg-amber-50 p-2.5 rounded-xl border border-amber-200 animate-in fade-in flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+          <div className="mt-2 text-xs font-mono text-amber-200 bg-amber-950/50 p-2.5 rounded-xl border border-amber-400/40 animate-in fade-in flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{actionNotice}</span>
           </div>
         )}
 
         {/* Tour Navigation Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-amber-100">
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-white/10">
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrevStep}
-              className="p-2 rounded-xl bg-amber-50/60 border border-amber-200 text-slate-700 hover:text-amber-800 hover:bg-amber-100 transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:bg-white/10 transition-colors cursor-pointer"
               title="Previous Step"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -294,7 +296,7 @@ export default function DollCompanion() {
 
             <button
               onClick={handleNextStep}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 text-white text-xs font-mono font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-yellow-700 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 text-slate-950 text-xs font-mono font-extrabold shadow-lg shadow-amber-500/30 hover:brightness-110 transition-all cursor-pointer"
             >
               <span>Walk &amp; Explain Next</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -305,25 +307,25 @@ export default function DollCompanion() {
           <div className="flex items-center gap-1.5 text-[10px] font-mono">
             <button
               onClick={() => setCurrentStep(1)}
-              className="px-2.5 py-1 rounded-lg bg-amber-50/50 border border-amber-200 text-slate-700 hover:text-amber-700 hover:border-amber-300 cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
             >
               About
             </button>
             <button
               onClick={() => setCurrentStep(2)}
-              className="px-2.5 py-1 rounded-lg bg-amber-50/50 border border-amber-200 text-slate-700 hover:text-amber-700 hover:border-amber-300 cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
             >
-              Skills
+              Exp
             </button>
             <button
-              onClick={() => setCurrentStep(3)}
-              className="px-2.5 py-1 rounded-lg bg-amber-50/50 border border-amber-200 text-slate-700 hover:text-amber-700 hover:border-amber-300 cursor-pointer"
+              onClick={() => setCurrentStep(4)}
+              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
             >
               Projects
             </button>
             <button
-              onClick={() => setCurrentStep(7)}
-              className="px-2.5 py-1 rounded-lg bg-amber-50/50 border border-amber-200 text-slate-700 hover:text-amber-700 hover:border-amber-300 cursor-pointer"
+              onClick={() => setCurrentStep(8)}
+              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-amber-300 hover:border-amber-400/40 cursor-pointer transition-colors"
             >
               Contact
             </button>
@@ -331,17 +333,17 @@ export default function DollCompanion() {
         </div>
 
         {/* Speech Bubble Arrow */}
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[14px] border-t-white" />
+        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[14px] border-t-slate-950/80" />
       </div>
 
-      {/* THE CUTE BUBBLY ROBOT THAT WALKS UP AND DOWN
-          Standalone on canvas (NO full boxed image!), with moving eyes, golden halo visor, and articulated walking legs */}
+      {/* THE PHOTOREALISTIC 3D ROBOT
+          Isolated cutout directly on canvas (NO rectangular box!) that walks smoothly up and down */}
       <div
         onClick={handleRobotTap}
-        className={`relative w-80 h-96 sm:w-96 sm:h-[420px] cursor-pointer flex flex-col items-center justify-center select-none ${
+        className={`relative w-76 h-96 sm:w-88 sm:h-[420px] cursor-pointer flex flex-col items-center justify-center select-none ${
           isWalkingUpDown ? "animate-walk-up-down" : ""
         }`}
-        title="Tap me! I'm Jahnavi Murthy's cute bubbly software robot!"
+        title="Tap me! I'm Jahnavi Murthy's realistic 3D software robot!"
       >
         {/* Floating Sparkle Particles */}
         {floatingParticles.map((p) => (
@@ -357,343 +359,59 @@ export default function DollCompanion() {
           </div>
         ))}
 
-        {/* Dynamic Floor Shadow (Expands and contracts as robot walks up and down) */}
-        <div className="absolute bottom-4 w-60 sm:w-72 h-10 rounded-full bg-amber-900/15 blur-lg -z-10 animate-pulse" />
+        {/* Dynamic Warm Ground Contact Light & Shadow */}
+        <div className="absolute bottom-4 w-64 sm:w-72 h-14 rounded-full bg-amber-500/25 blur-xl -z-10 animate-pulse pointer-events-none" />
+        <div className="absolute bottom-2 w-48 sm:w-56 h-8 rounded-full bg-black/70 blur-md -z-10 pointer-events-none" />
 
-        {/* Warm Fairy Light Strand at Robot's Feet */}
-        <div className="absolute bottom-2 w-72 sm:w-84 h-6 flex items-center justify-around pointer-events-none -z-10">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-md shadow-amber-400 animate-fairy-glow" />
-          <span className="w-3.5 h-3.5 rounded-full bg-yellow-200 shadow-lg shadow-amber-300 animate-fairy-glow" />
-          <span className="w-2 h-2 rounded-full bg-amber-400 shadow-md shadow-amber-400 animate-fairy-glow" />
-          <span className="w-3 h-3 rounded-full bg-yellow-100 shadow-lg shadow-amber-400 animate-fairy-glow" />
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-md shadow-amber-400 animate-fairy-glow" />
-        </div>
-
-        {/* 3D SCULPTED CUTE BUBBLY ROBOT */}
+        {/* 3D Realistic Robot Model Container with 3D Head Tilt */}
         <div
           style={{
             transform: `rotateX(${headTilt.x}deg) rotateY(${headTilt.y}deg)`,
             transformStyle: "preserve-3d",
-            transition: "transform 0.12s ease-out",
+            transition: "transform 0.15s ease-out",
           }}
-          className={`relative w-full h-full flex flex-col items-center justify-center [perspective:1000px] ${
-            isWalkingUpDown ? "animate-walk-bob animate-bubbly-bounce" : "animate-float"
-          }`}
+          className="relative w-full h-full flex flex-col items-center justify-center animate-robot-breathe [perspective:1000px]"
         >
-          <svg
-            viewBox="0 0 400 460"
-            className="w-full h-full drop-shadow-2xl overflow-visible"
-          >
-            <defs>
-              {/* Glossy Bubbly White Ceramic Helmet */}
-              <radialGradient id="bubblyHeadGrad" cx="38%" cy="28%" r="72%">
-                <stop offset="0%" stopColor="#FFFFFF" />
-                <stop offset="40%" stopColor="#FCFBF8" />
-                <stop offset="80%" stopColor="#EDE7DC" />
-                <stop offset="100%" stopColor="#D8D0C3" />
-              </radialGradient>
+          {/* THE REALISTIC 3D CUTOUT IMAGE (NO BOXED BACKGROUND!) */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/robot_realistic.png"
+            alt="Jahnavi's Realistic 3D Robot"
+            className="w-auto h-full max-h-[380px] sm:max-h-[420px] object-contain drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)] pointer-events-none transition-transform duration-300 group-hover:scale-105"
+          />
 
-              {/* Chubby Round Torso */}
-              <radialGradient id="bubblyBodyGrad" cx="42%" cy="32%" r="68%">
-                <stop offset="0%" stopColor="#FFFFFF" />
-                <stop offset="50%" stopColor="#FAF7F2" />
-                <stop offset="88%" stopColor="#E5DFD4" />
-                <stop offset="100%" stopColor="#D0C7B8" />
-              </radialGradient>
-
-              {/* Metallic Golden Mechanical Joints */}
-              <linearGradient id="goldJointGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FDE68A" />
-                <stop offset="35%" stopColor="#F59E0B" />
-                <stop offset="70%" stopColor="#D97706" />
-                <stop offset="100%" stopColor="#92400E" />
-              </linearGradient>
-
-              {/* Dark Obsidian Visor Screen */}
-              <radialGradient id="visorGlassGrad" cx="50%" cy="40%" r="65%">
-                <stop offset="0%" stopColor="#2E231C" />
-                <stop offset="65%" stopColor="#18120E" />
-                <stop offset="100%" stopColor="#0B0806" />
-              </radialGradient>
-
-              {/* Cute Bubbly Eyes Core */}
-              <radialGradient id="cuteEyeGrad" cx="45%" cy="45%" r="60%">
-                <stop offset="0%" stopColor="#35261D" />
-                <stop offset="75%" stopColor="#17100B" />
-                <stop offset="100%" stopColor="#0A0704" />
-              </radialGradient>
-
-              {/* Golden Visor Halo Glow Filter */}
-              <filter id="goldenHaloGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="4.5" result="blur1" />
-                <feGaussianBlur stdDeviation="9" result="blur2" />
-                <feMerge>
-                  <feMergeNode in="blur2" />
-                  <feMergeNode in="blur1" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-
-              {/* Cute Cheek Blush Blur */}
-              <filter id="blushGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" />
-              </filter>
-            </defs>
-
-            {/* === 1. CHUBBY BUBBLY WALKING FEET & LEGS === */}
-            {/* Left Foot (Articulated Walking Swing) */}
-            <g className={isWalkingUpDown ? "animate-walk-left-leg" : ""}>
-              <circle cx="165" cy="388" r="9" fill="url(#goldJointGrad)" />
-              <path
-                d="M 158 388 L 154 416 C 154 420 176 420 176 416 L 172 388 Z"
-                fill="url(#bubblyBodyGrad)"
+          {/* INTERACTIVE MOVING EYE OVERLAYS (Tracking mouse cursor over the 3D model) */}
+          <div className="absolute top-[38%] left-[46%] w-10 h-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            {!blinking && (
+              <div
+                className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] opacity-95 transition-transform duration-75 ease-out"
+                style={{
+                  transform: `translate(${eyeOffset.x * 0.7}px, ${eyeOffset.y * 0.7}px)`,
+                }}
               />
-              <rect x="153" y="414" width="24" height="4" rx="2" fill="url(#goldJointGrad)" />
-              {/* Bubbly Round Boot */}
-              <ellipse cx="165" cy="428" rx="26" ry="14" fill="#C9C2B5" />
-              <ellipse cx="165" cy="425" rx="24" ry="12" fill="url(#bubblyHeadGrad)" />
-              <ellipse cx="165" cy="422" rx="16" ry="7" fill="url(#goldJointGrad)" opacity="0.85" />
-            </g>
+            )}
+          </div>
 
-            {/* Right Foot (Opposite Walking Swing) */}
-            <g className={isWalkingUpDown ? "animate-walk-right-leg" : ""}>
-              <circle cx="235" cy="388" r="9" fill="url(#goldJointGrad)" />
-              <path
-                d="M 228 388 L 224 416 C 224 420 246 420 246 416 L 242 388 Z"
-                fill="url(#bubblyBodyGrad)"
+          <div className="absolute top-[40%] left-[84%] w-8 h-8 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            {!blinking && !isWinking && (
+              <div
+                className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] opacity-95 transition-transform duration-75 ease-out"
+                style={{
+                  transform: `translate(${eyeOffset.x * 0.6}px, ${eyeOffset.y * 0.6}px)`,
+                }}
               />
-              <rect x="223" y="414" width="24" height="4" rx="2" fill="url(#goldJointGrad)" />
-              {/* Bubbly Round Boot */}
-              <ellipse cx="235" cy="428" rx="26" ry="14" fill="#C9C2B5" />
-              <ellipse cx="235" cy="425" rx="24" ry="12" fill="url(#bubblyHeadGrad)" />
-              <ellipse cx="235" cy="422" rx="16" ry="7" fill="url(#goldJointGrad)" opacity="0.85" />
-            </g>
+            )}
+          </div>
 
-            {/* === 2. CHUBBY BUBBLY TORSO & JAHNAVI NAME BADGE === */}
-            <ellipse cx="200" cy="365" rx="60" ry="46" fill="url(#bubblyBodyGrad)" />
-
-            {/* Golden Mechanical Waist Joint Ring */}
-            <path
-              d="M 150 382 Q 200 395 250 382"
-              stroke="url(#goldJointGrad)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              fill="none"
-            />
-
-            {/* ILLUMINATED NAME BADGE: JAHNAVI */}
-            <g>
-              <rect
-                x="150"
-                y="336"
-                width="100"
-                height="22"
-                rx="11"
-                fill="#1C1814"
-                stroke="url(#goldJointGrad)"
-                strokeWidth="1.8"
-              />
-              <circle cx="164" cy="347" r="3" fill="#F59E0B" className="animate-pulse" />
-              <text
-                x="207"
-                y="351.5"
-                textAnchor="middle"
-                fontSize="10"
-                fontWeight="900"
-                fontFamily="ui-monospace, monospace"
-                fill="#FDE68A"
-                letterSpacing="1.4"
-              >
+          {/* ILLUMINATED 3D NAME BADGE EMBOSSED ON CHEST: JAHNAVI */}
+          <div className="absolute top-[68%] left-[54%] -translate-x-1/2 pointer-events-none z-30">
+            <div className="px-3 py-0.8 rounded-full bg-slate-950/90 backdrop-blur-md border border-amber-400/90 shadow-[0_0_15px_rgba(245,158,11,0.6)] flex items-center gap-1.5 animate-pulse">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400" />
+              <span className="text-[9.5px] sm:text-[10.5px] font-mono font-black tracking-widest text-amber-200 drop-shadow">
                 JAHNAVI
-              </text>
-            </g>
-
-            {/* === 3. STUBBY CHUBBY BUBBLY ARMS & HANDS === */}
-            <g className={isWalkingUpDown ? "animate-walk-arms origin-[145px_335px]" : ""}>
-              <circle cx="145" cy="336" r="8" fill="url(#goldJointGrad)" />
-              <path
-                d="M 144 336 Q 118 355 124 378"
-                stroke="url(#bubblyBodyGrad)"
-                strokeWidth="15"
-                strokeLinecap="round"
-                fill="none"
-              />
-              <circle cx="124" cy="378" r="5" fill="url(#goldJointGrad)" />
-              <circle cx="125" cy="385" r="9" fill="url(#bubblyHeadGrad)" />
-            </g>
-
-            <g className={isWalkingUpDown ? "animate-walk-arms origin-[255px_335px] [animation-direction:reverse]" : ""}>
-              <circle cx="255" cy="336" r="8" fill="url(#goldJointGrad)" />
-              <path
-                d="M 256 336 Q 282 355 276 378"
-                stroke="url(#bubblyBodyGrad)"
-                strokeWidth="15"
-                strokeLinecap="round"
-                fill="none"
-              />
-              <circle cx="276" cy="378" r="5" fill="url(#goldJointGrad)" />
-              <circle cx="275" cy="385" r="9" fill="url(#bubblyHeadGrad)" />
-            </g>
-
-            {/* === 4. GIANT SPHERICAL BUBBLE HEAD & HELMET === */}
-            {/* Perfect Bubbly Head */}
-            <ellipse cx="200" cy="192" rx="118" ry="114" fill="url(#bubblyHeadGrad)" />
-
-            {/* Bubbly Specular Gloss Glaze */}
-            <path
-              d="M 125 120 Q 200 90 275 120 Q 200 105 125 120 Z"
-              fill="#FFFFFF"
-              opacity="0.85"
-            />
-
-            {/* Bubbly Round Capsule Headphones */}
-            <g>
-              <ellipse cx="84" cy="202" rx="14" ry="42" fill="#D5CEC3" />
-              <ellipse cx="87" cy="202" rx="11" ry="38" fill="url(#bubblyHeadGrad)" />
-              <circle cx="87" cy="202" r="4.5" fill="url(#goldJointGrad)" />
-            </g>
-
-            <g>
-              <ellipse cx="316" cy="202" rx="14" ry="42" fill="#D5CEC3" />
-              <ellipse cx="313" cy="202" rx="11" ry="38" fill="url(#bubblyHeadGrad)" />
-              <circle cx="313" cy="202" r="4.5" fill="url(#goldJointGrad)" />
-            </g>
-
-            {/* Cute Golden Cheek Blush (Bubbly blush ovals) */}
-            <ellipse cx="132" cy="235" rx="12" ry="7" fill="#F59E0B" opacity="0.32" filter="url(#blushGlow)" />
-            <ellipse cx="268" cy="235" rx="12" ry="7" fill="#F59E0B" opacity="0.32" filter="url(#blushGlow)" />
-
-            {/* === 5. PULSING GOLDEN HALO VISOR RIM === */}
-            <path
-              d="M 112 208 C 112 153 150 133 200 133 C 250 133 288 153 288 208 C 288 263 250 278 200 278 C 150 278 112 263 112 208 Z"
-              stroke="#F59E0B"
-              strokeWidth="6"
-              fill="none"
-              filter="url(#goldenHaloGlow)"
-            />
-
-            <path
-              d="M 112 208 C 112 153 150 133 200 133 C 250 133 288 153 288 208 C 288 263 250 278 200 278 C 150 278 112 263 112 208 Z"
-              stroke="#FEF3C7"
-              strokeWidth="2.5"
-              fill="none"
-            />
-
-            {/* Dark Glossy Obsidian Glass Visor */}
-            <path
-              d="M 116 208 C 116 158 152 138 200 138 C 248 138 284 158 284 208 C 284 258 248 273 200 273 C 152 273 116 258 116 208 Z"
-              fill="url(#visorGlassGrad)"
-            />
-
-            {/* Curved Specular Glaze */}
-            <path
-              d="M 135 163 Q 200 146 265 163 Q 200 154 135 163 Z"
-              fill="#FFFFFF"
-              opacity="0.2"
-            />
-
-            {/* === 6. GIANT BUBBLY EYES (Smooth Mouse Cursor Tracking) === */}
-            {/* Left Eye */}
-            <g>
-              <circle cx="162" cy="213" r="26" fill="none" stroke="#F59E0B" strokeWidth="2.5" filter="url(#goldenHaloGlow)" />
-              <circle
-                cx={162 + eyeOffset.x * 0.45}
-                cy={213 + eyeOffset.y * 0.45}
-                r="24"
-                fill="url(#cuteEyeGrad)"
-              />
-
-              {blinking ? (
-                <rect x="140" y="211" width="44" height="4" rx="2" fill="#F59E0B" />
-              ) : (
-                <>
-                  <circle
-                    cx={162 + eyeOffset.x * 0.35}
-                    cy={213 + eyeOffset.y * 0.35}
-                    r="12"
-                    fill="#D97706"
-                    opacity="0.45"
-                  />
-                  {/* Top-Left Crisp Specular Highlight */}
-                  <ellipse
-                    cx={154 + eyeOffset.x * 0.3}
-                    cy={204 + eyeOffset.y * 0.3}
-                    rx="8"
-                    ry="6.5"
-                    fill="#FFFFFF"
-                    opacity="0.95"
-                    transform="rotate(-20 154 204)"
-                  />
-                  {/* Bottom-Right Secondary Reflection */}
-                  <circle
-                    cx={170 + eyeOffset.x * 0.3}
-                    cy={222 + eyeOffset.y * 0.3}
-                    r="4"
-                    fill="#FFFFFF"
-                    opacity="0.85"
-                  />
-                </>
-              )}
-            </g>
-
-            {/* Right Eye */}
-            <g>
-              <circle cx="238" cy="213" r="26" fill="none" stroke="#F59E0B" strokeWidth="2.5" filter="url(#goldenHaloGlow)" />
-              <circle
-                cx={238 + eyeOffset.x * 0.45}
-                cy={213 + eyeOffset.y * 0.45}
-                r="24"
-                fill="url(#cuteEyeGrad)"
-              />
-
-              {blinking || isWinking ? (
-                <path
-                  d="M 218 213 Q 238 224 258 213"
-                  stroke="#F59E0B"
-                  strokeWidth="4.5"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              ) : (
-                <>
-                  <circle
-                    cx={238 + eyeOffset.x * 0.35}
-                    cy={213 + eyeOffset.y * 0.35}
-                    r="12"
-                    fill="#D97706"
-                    opacity="0.45"
-                  />
-                  {/* Top-Left Crisp Specular Highlight */}
-                  <ellipse
-                    cx={230 + eyeOffset.x * 0.3}
-                    cy={204 + eyeOffset.y * 0.3}
-                    rx="8"
-                    ry="6.5"
-                    fill="#FFFFFF"
-                    opacity="0.95"
-                    transform="rotate(-20 230 204)"
-                  />
-                  {/* Bottom-Right Secondary Reflection */}
-                  <circle
-                    cx={246 + eyeOffset.x * 0.3}
-                    cy={222 + eyeOffset.y * 0.3}
-                    r="4"
-                    fill="#FFFFFF"
-                    opacity="0.85"
-                  />
-                </>
-              )}
-            </g>
-
-            {/* === 7. SWEET BUBBLY CHIBI SMILE === */}
-            <path
-              d="M 192 245 Q 200 252 208 245"
-              stroke="#F59E0B"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              fill="none"
-            />
-          </svg>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -705,10 +423,10 @@ export default function DollCompanion() {
             setIsWalkingUpDown(!isWalkingUpDown);
             playCuteSound(isWalkingUpDown ? 480 : 720);
           }}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 shadow-xs ${
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 shadow-md ${
             isWalkingUpDown
-              ? "bg-amber-500 text-white font-bold shadow-amber-500/30"
-              : "bg-white text-slate-700 border border-amber-200 hover:text-amber-700"
+              ? "bg-amber-500 text-slate-950 font-extrabold shadow-amber-500/30"
+              : "bg-slate-900/90 text-slate-200 border border-white/10 hover:border-amber-400/50"
           }`}
           title={isWalkingUpDown ? "Pause walking up & down" : "Start walking up & down"}
         >
@@ -719,19 +437,19 @@ export default function DollCompanion() {
         {/* Tap Me Reaction */}
         <button
           onClick={handleRobotTap}
-          className="px-3.5 py-1.5 rounded-xl text-xs font-mono bg-amber-100/90 text-amber-900 border border-amber-300 hover:bg-amber-200 transition-all cursor-pointer font-bold flex items-center gap-1.5 shadow-xs"
+          className="px-3.5 py-1.5 rounded-xl text-xs font-mono bg-amber-400/20 text-amber-200 border border-amber-400/40 hover:bg-amber-400/30 transition-all cursor-pointer font-bold flex items-center gap-1.5 shadow-xs"
         >
-          <Heart className="w-3.5 h-3.5 text-amber-600 fill-amber-600" />
-          <span>Bubbly Tap!</span>
+          <Heart className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+          <span>Tap Me!</span>
         </button>
 
         {/* Next Project Tour Trigger */}
         <button
           onClick={handleNextStep}
-          className="px-3 py-1.5 rounded-xl text-xs font-mono bg-white text-slate-700 border border-amber-200 hover:text-amber-800 hover:border-amber-300 transition-all cursor-pointer flex items-center gap-1"
+          className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-900/90 text-slate-200 border border-white/10 hover:border-amber-400/50 hover:text-amber-300 transition-all cursor-pointer flex items-center gap-1"
         >
-          <span>Next Project</span>
-          <ChevronRight className="w-3 h-3 text-amber-600" />
+          <span>Next Stop</span>
+          <ChevronRight className="w-3 h-3 text-amber-400" />
         </button>
       </div>
     </div>
