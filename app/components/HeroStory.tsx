@@ -10,7 +10,6 @@ import {
   Copy,
   Check,
   ChevronRight,
-  Heart,
   FolderGit2,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./icons";
@@ -35,22 +34,6 @@ export default function HeroStory() {
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-8 sm:gap-4 lg:gap-12 items-start">
           {/* Left Column: Jahnavi's Identity & Core Introduction */}
           <div className="sm:col-span-8 lg:col-span-7 space-y-6 text-left">
-            {/* Status Pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-pink-400/30 text-xs font-mono text-pink-200 shadow-[0_0_15px_rgba(244,114,182,0.2)]">
-              <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
-              <span className="font-semibold tracking-wider">
-                AVAILABLE &bull; 2026 SOFTWARE ENGINEERING ROLES
-              </span>
-            </div>
-
-            {/* Conversational Greeting Card */}
-            <div className="p-4 sm:p-5 rounded-3xl scifi-glass-panel border-pink-400/25 relative max-w-xl">
-              <p className="text-base sm:text-lg text-slate-100 font-sans leading-relaxed">
-                <span className="text-pink-300 font-bold">&ldquo;Hi, I&apos;m Jahnavi.</span>{" "}
-                Welcome to my little corner of the internet. Scroll down and I&apos;ll show you around.&rdquo;
-              </p>
-            </div>
-
             {/* Prominent Name Display with Adorable Pastel Typography */}
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-purple-300 font-bold mb-2 block">
@@ -136,24 +119,6 @@ export default function HeroStory() {
                   </>
                 )}
               </button>
-            </div>
-          </div>
-
-          {/* Portfolio guide details */}
-          <div className="sm:col-span-4 lg:col-span-5 flex items-center justify-center lg:justify-end">
-            <div className="w-full max-w-[230px] p-4 rounded-3xl bg-black/40 backdrop-blur-xl border border-pink-400/30 shadow-[0_12px_35px_rgba(0,0,0,0.45)] space-y-2">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-pink-300 font-bold flex items-center gap-1.5">
-                  <Heart className="w-3.5 h-3.5 text-pink-400 fill-pink-400/40" />
-                  <span>PORTFOLIO GUIDE</span>
-                </span>
-                <span className="text-[10px] text-purple-200 font-semibold px-2 py-0.5 rounded-full bg-pink-500/20">
-                  ONLINE
-                </span>
-              </div>
-              <p className="text-xs text-slate-200 font-sans leading-relaxed">
-                Software Engineer &bull; Dual foundation in Computer Science &amp; Physics.
-              </p>
             </div>
           </div>
         </div>
